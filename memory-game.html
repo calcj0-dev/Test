@@ -7,11 +7,86 @@
     <link rel="stylesheet" href="memory-game.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>神経衰弱</h1>
-        <p>準備中...</p>
-        <a href="index.html" class="back-btn">メニューに戻る</a>
+    <!-- 難易度選択画面 -->
+    <div id="difficultyScreen" class="screen">
+        <div class="screen-container">
+            <h1>神経衰弱</h1>
+            <h2>難易度を選択してください</h2>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn easy" onclick="startGame('easy')">
+                    <span class="diff-icon">😊</span>
+                    <span class="diff-name">初級</span>
+                    <span class="diff-desc">ランダムに選択</span>
+                </button>
+                <button class="difficulty-btn normal" onclick="startGame('normal')">
+                    <span class="diff-icon">🤔</span>
+                    <span class="diff-name">中級</span>
+                    <span class="diff-desc">数ターン記憶</span>
+                </button>
+                <button class="difficulty-btn hard" onclick="startGame('hard')">
+                    <span class="diff-icon">🧠</span>
+                    <span class="diff-name">上級</span>
+                    <span class="diff-desc">完全記憶</span>
+                </button>
+            </div>
+            <a href="index.html" class="back-btn">メニューに戻る</a>
+        </div>
     </div>
+
+    <!-- ゲーム画面 -->
+    <div id="gameScreen" class="screen" style="display: none;">
+        <div class="game-header">
+            <div class="score-board">
+                <div class="player-score">
+                    <h3>プレイヤー</h3>
+                    <div class="score" id="playerScore">0</div>
+                    <div class="turn-indicator" id="playerTurn"></div>
+                </div>
+                <div class="game-info">
+                    <div id="turnMessage">あなたのターン</div>
+                    <div class="remaining">残り: <span id="remainingPairs">26</span>ペア</div>
+                </div>
+                <div class="computer-score">
+                    <h3>コンピュータ</h3>
+                    <div class="score" id="computerScore">0</div>
+                    <div class="turn-indicator" id="computerTurn"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cardBoard" class="card-board"></div>
+
+        <div class="game-controls">
+            <button onclick="resetGame()" class="control-btn">リセット</button>
+            <a href="index.html" class="control-btn">メニューへ</a>
+        </div>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="resultScreen" class="screen" style="display: none;">
+        <div class="screen-container">
+            <h1 id="resultTitle">ゲーム終了</h1>
+            <div class="result-content">
+                <div class="final-scores">
+                    <div class="final-score">
+                        <h3>プレイヤー</h3>
+                        <div class="big-score" id="finalPlayerScore">0</div>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="final-score">
+                        <h3>コンピュータ</h3>
+                        <div class="big-score" id="finalComputerScore">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="result-buttons">
+                <button onclick="restartGame()" class="result-btn">再戦</button>
+                <button onclick="backToMenu()" class="result-btn">難易度選択へ</button>
+                <a href="index.html" class="result-btn">メニューへ</a>
+            </div>
+        </div>
+    </div>
+
     <script src="memory-game.js"></script>
 </body>
 </html>
