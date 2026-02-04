@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テスト</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            text-align: center;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 1.5em;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScriptテスト</h1>
+    <button onclick="testFunction()">ボタンをクリック</button>
+    <div id="result"></div>
+    
+    <script>
+        function testFunction() {
+            document.getElementById('result').textContent = 'JavaScriptは正常に動作しています！';
+            console.log('Test function called');
+        }
+        console.log('Script loaded successfully');
+    </script>
+</body>
+</html>

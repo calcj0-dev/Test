@@ -16,14 +16,17 @@ const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'
 
 // ゲーム開始
 function startGame(selectedDifficulty) {
+    console.log('startGame called with difficulty:', selectedDifficulty);
     difficulty = selectedDifficulty;
     initializeGame();
     document.getElementById('difficultyScreen').style.display = 'none';
     document.getElementById('gameScreen').style.display = 'block';
+    console.log('Game started successfully');
 }
 
 // ゲーム初期化
 function initializeGame() {
+    console.log('Initializing game...');
     cards = [];
     flippedCards = [];
     matchedPairs = [];
@@ -47,6 +50,8 @@ function initializeGame() {
         });
     });
     
+    console.log('Total cards created:', cards.length);
+    
     // シャッフル
     cards = shuffleArray(cards);
     
@@ -54,6 +59,7 @@ function initializeGame() {
     renderCards();
     updateScore();
     updateTurn();
+    console.log('Game initialized successfully');
 }
 
 // カードをシャッフル
@@ -305,3 +311,13 @@ function backToMenu() {
     document.getElementById('resultScreen').style.display = 'none';
     document.getElementById('difficultyScreen').style.display = 'flex';
 }
+
+// スクリプト読み込み完了確認
+console.log('memory-game.js loaded successfully');
+console.log('startGame function:', typeof startGame);
+
+// DOMが読み込まれた後に初期化
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded');
+    console.log('Difficulty screen element:', document.getElementById('difficultyScreen'));
+});
