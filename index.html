@@ -3,38 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>テトリス</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ゲームメニュー</title>
+    <link rel="stylesheet" href="menu.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>テトリス</h1>
-        <div class="game-info">
-            <div class="info-item">
-                <span>スコア:</span>
-                <span id="score">0</span>
-            </div>
-            <div class="info-item">
-                <span>レベル:</span>
-                <span id="level">1</span>
-            </div>
-            <div class="info-item">
-                <span>ライン:</span>
-                <span id="lines">0</span>
-            </div>
+    <div class="menu-container">
+        <h1>ゲームセンター</h1>
+        <p class="subtitle">遊びたいゲームを選んでください</p>
+        
+        <div class="game-grid">
+            <a href="tetris.html" class="game-card">
+                <div class="game-icon">🎮</div>
+                <h2>テトリス</h2>
+                <p>落ちてくるブロックを揃えて消そう！</p>
+            </a>
+            
+            <a href="memory-game.html" class="game-card">
+                <div class="game-icon">🃏</div>
+                <h2>神経衰弱</h2>
+                <p>カードをめくって同じ絵柄を探そう！</p>
+            </a>
         </div>
-        <canvas id="tetris" width="240" height="400"></canvas>
-        <div class="controls">
-            <p><strong>操作方法:</strong></p>
-            <p>← → : 移動</p>
-            <p>↑ : 回転</p>
-            <p>↓ : 高速落下</p>
-            <p>スペース : 一気に落下</p>
-            <p>P : 一時停止</p>
-        </div>
-        <button id="startBtn" class="start-btn">ゲーム開始</button>
-        <button id="restartBtn" class="restart-btn" style="display:none;">再スタート</button>
+        
+        <footer>
+            <p>© 2026 Game Center</p>
+        </footer>
     </div>
-    <script src="tetris.js"></script>
 </body>
 </html>
