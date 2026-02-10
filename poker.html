@@ -161,12 +161,9 @@
 
         /* プレイヤー配置 */
         .player-seat {
+            position: absolute;
             width: 180px;
             text-align: center;
-        }
-
-        .player-seat {
-            position: absolute;
         }
 
         .player-seat.seat-0 { bottom: -60px; left: 50%; transform: translateX(-50%); z-index: 10; }
@@ -1081,7 +1078,10 @@ function startNewRound() {
     // アクティブなプレイヤーをチェック
     const activePlayers = players.filter(p => p.isActive);
     if (activePlayers.length === 1) {
-        endGame(activePlayers[0]);
+        // ゲーム終了
+        if (activePlayers[0].id === 0) {
+            showResult('🎉 優勝！', 'すべての相手を倒しました！');
+        }
         return;
     }
 
@@ -1091,7 +1091,6 @@ function startNewRound() {
     pot = 0;
     currentBet = 0;
     gamePhase = 'preflop';
-    roundBets = players.map(() => 0);
 
     players.forEach(player => {
         player.cards = [];
@@ -1101,7 +1100,6 @@ function startNewRound() {
         player.isDealer = false;
         player.isSmallBlind = false;
         player.isBigBlind = false;
-        player.hasActed = false;  // アクション済みフラグを追加
     });
 
     // ディーラー・ブラインドを設定
@@ -1428,43 +1426,54 @@ function nextPlayer() {
         return;
     }
 
-    // 次のアクティブプレイヤーを探す
-    let startIndex = currentPlayerIndex;
-    let nextIndex = (currentPlayerIndex + 1) % players.length;
+    // アクション可能なプレイヤー（フォールドせず、オールインでもない）
+    const playersWhoCanAct = players.filter(p => p.isActive && !p.folded && !p.allIn);
 
-    while (players[nextIndex].folded || !players[nextIndex].isActive || players[nextIndex].allIn) {
-        nextIndex = (nextIndex + 1) % players.length;
-        if (nextIndex === startIndex) {
-            // 全員がフォールドまたはオールイン
-            nextPhase();
-            return;
-        }
-    }
-
-    // 全員がベットを揃えたかチェック（アクティブかつ未フォールドのプレイヤー）
-    const playersWhoCanBet = players.filter(p => p.isActive && !p.folded && !p.allIn);
-    const allBetsEqual = playersWhoCanBet.every(p => p.bet === currentBet);
-
-    // 全員アクション済みかチェック
-    if (allBetsEqual && nextIndex === startIndex) {
+    // アクション可能なプレイヤーがいない場合は次のフェーズへ
+    if (playersWhoCanAct.length === 0) {
         nextPhase();
         return;
     }
 
-    // 全員が同じベット額で、一周した場合
-    if (allBetsEqual && playersWhoCanBet.length > 0) {
-        // 最後にベットしたプレイヤーまで戻ってきたかチェック
-        let hasActed = true;
-        for (let p of playersWhoCanBet) {
-            if (p.bet !== currentBet) {
-                hasActed = false;
-                break;
+    // 全員がベットを揃えたかチェック
+    const allBetsEqual = playersWhoCanAct.every(p => p.bet === currentBet);
+
+    // 次のプレイヤーを探す
+    let attempts = 0;
+    let nextIndex = (currentPlayerIndex + 1) % players.length;
+
+    while (attempts < players.length) {
+        if (players[nextIndex].isActive && !players[nextIndex].folded && !players[nextIndex].allIn) {
+            // 全員がベットを揃えていて、最初のプレイヤーに戻った場合
+            if (allBetsEqual && playersWhoCanAct.length === 1) {
+                nextPhase();
+                return;
             }
+
+            // 全員がベットを揃えていて、一周した場合
+            if (allBetsEqual) {
+                // ディーラーの次のプレイヤーまで戻ってきたらフェーズ終了
+                let firstToAct = (dealerPosition + 1) % players.length;
+                while (players[firstToAct].folded || !players[firstToAct].isActive || players[firstToAct].allIn) {
+                    firstToAct = (firstToAct + 1) % players.length;
+                }
+
+                if (nextIndex === firstToAct && currentPlayerIndex !== firstToAct) {
+                    nextPhase();
+                    return;
+                }
+            }
+
+            break;
         }
-        if (hasActed && nextIndex <= startIndex) {
-            nextPhase();
-            return;
-        }
+        nextIndex = (nextIndex + 1) % players.length;
+        attempts++;
+    }
+
+    // 全員がフォールドまたはオールインの場合
+    if (attempts >= players.length) {
+        nextPhase();
+        return;
     }
 
     currentPlayerIndex = nextIndex;
@@ -1570,7 +1579,6 @@ function nextPhase() {
     // ベットをリセット
     players.forEach(p => {
         p.bet = 0;
-        p.hasActed = false;
     });
     currentBet = 0;
 
@@ -1613,10 +1621,18 @@ function nextPhase() {
     // 表示を更新してコミュニティカードを表示
     updateDisplay();
 
-    // ディーラーの次から開始
+    // ディーラーの次のアクティブプレイヤーから開始
     currentPlayerIndex = (dealerPosition + 1) % players.length;
-    while (!players[currentPlayerIndex].isActive || players[currentPlayerIndex].folded || players[currentPlayerIndex].allIn) {
+    let attempts = 0;
+    while (attempts < players.length && (players[currentPlayerIndex].folded || !players[currentPlayerIndex].isActive || players[currentPlayerIndex].allIn)) {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        attempts++;
+    }
+
+    // アクション可能なプレイヤーがいない場合は次のフェーズへ
+    if (attempts >= players.length) {
+        setTimeout(() => nextPhase(), 1000);
+        return;
     }
 
     if (currentPlayerIndex !== 0) {
