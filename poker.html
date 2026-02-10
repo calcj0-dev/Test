@@ -179,6 +179,7 @@
             padding: 15px 10px;
             margin-bottom: 10px;
             transition: all 0.3s;
+            position: relative;
         }
 
         .player-info.active {
@@ -207,6 +208,12 @@
         .player-info.all-in {
             border-color: #ff5722;
             box-shadow: 0 0 20px rgba(255, 87, 34, 0.6);
+        }
+
+        .player-avatar {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
         }
 
         .player-name {
@@ -241,6 +248,78 @@
             margin-top: 6px;
             font-style: italic;
             font-weight: bold;
+        }
+
+        .action-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: actionPop 0.5s ease-out;
+            pointer-events: none;
+            z-index: 100;
+            border: 2px solid white;
+        }
+
+        @keyframes actionPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.15);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .action-indicator.fold { background: #f44336; }
+        .action-indicator.call { background: #2196f3; }
+        .action-indicator.raise { background: #ff9800; }
+        .action-indicator.check { background: #4caf50; }
+        .action-indicator.allin { background: #9c27b0; }
+
+        .winner-glow {
+            animation: winnerGlow 1s ease-in-out 3;
+            border-color: #ffd700 !important;
+        }
+
+        @keyframes winnerGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 215, 0, 1);
+            }
+        }
+
+        .chip-animation {
+            position: absolute;
+            font-size: 1.5em;
+            animation: chipToPot 1s ease-in-out forwards;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes chipToPot {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.5);
+            }
         }
 
         .dealer-button {
@@ -283,29 +362,68 @@
         }
 
         .card {
-            width: 55px;
-            height: 77px;
+            width: 65px;
+            height: 90px;
             background: white;
             border: 2px solid #333;
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.2em;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            font-size: 1.3em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             position: relative;
-            transition: transform 0.2s;
+            transition: transform 0.3s ease;
+            animation: cardAppear 0.3s ease-out;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
         }
 
         .card.back {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            border: 2px solid #4a6fa5;
+            background:
+                repeating-linear-gradient(45deg, #1e3c72 0px, #1e3c72 10px, #2a5298 10px, #2a5298 20px),
+                repeating-linear-gradient(-45deg, #2a5298 0px, #2a5298 10px, #1e3c72 10px, #1e3c72 20px);
+            border: 3px solid #4a6fa5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card.back::before {
+            content: '♠♥♦♣';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 3px;
+        }
+
+        .card.back::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .card.hearts, .card.diamonds {
@@ -340,14 +458,14 @@
         }
 
         .community-cards .card {
-            width: 70px;
-            height: 100px;
-            font-size: 1.4em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            width: 80px;
+            height: 110px;
+            font-size: 1.5em;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
         }
 
         .community-cards .card .card-value {
-            font-size: 1.5em;
+            font-size: 1.6em;
         }
 
         /* ポット */
@@ -688,6 +806,15 @@
             .player-chips {
                 font-size: 1em;
             }
+
+            .player-avatar {
+                font-size: 2em;
+            }
+
+            .action-indicator {
+                font-size: 0.8em;
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 600px) {
@@ -710,6 +837,15 @@
                 right: 10px;
                 font-size: 0.75em;
                 padding: 6px 10px;
+            }
+
+            .player-avatar {
+                font-size: 1.8em;
+            }
+
+            .action-indicator {
+                font-size: 0.7em;
+                padding: 5px 8px;
             }
         }
     </style>
@@ -825,6 +961,7 @@ const INITIAL_CHIPS = 10000;
 const SMALL_BLIND = 100;
 const BIG_BLIND = 200;
 const PLAYER_NAMES = ['あなた', 'CPU1', 'CPU2', 'CPU3', 'CPU4'];
+const PLAYER_AVATARS = ['🦁', '🐱', '🐨', '🐘', '🐶'];
 
 // ゲーム状態
 let difficulty = 'normal';
@@ -923,6 +1060,7 @@ function renderPlayers() {
 
         seat.innerHTML = `
             <div class="player-info" id="info-${index}">
+                <div class="player-avatar">${PLAYER_AVATARS[index]}</div>
                 <div class="player-name">${player.name}</div>
                 <div class="player-chips" id="chips-${index}">💰 $${player.chips}</div>
                 <div class="player-bet" id="bet-${index}"></div>
@@ -1051,22 +1189,28 @@ function dealCards() {
 function collectBlinds() {
     const sbPlayer = players.find(p => p.isSmallBlind);
     const bbPlayer = players.find(p => p.isBigBlind);
-    
+
     const sbAmount = Math.min(SMALL_BLIND, sbPlayer.chips);
     const bbAmount = Math.min(BIG_BLIND, bbPlayer.chips);
-    
+
     sbPlayer.chips -= sbAmount;
     sbPlayer.bet = sbAmount;
     pot += sbAmount;
-    
+
     bbPlayer.chips -= bbAmount;
     bbPlayer.bet = bbAmount;
     pot += bbAmount;
-    
+
     currentBet = BIG_BLIND;
-    
+
     addLog(`${sbPlayer.name} がスモールブラインド $${sbAmount} を支払いました`);
     addLog(`${bbPlayer.name} がビッグブラインド $${bbAmount} を支払いました`);
+
+    // アニメーションは表示更新後に実行
+    setTimeout(() => {
+        animateChipToPot(sbPlayer.id, sbAmount);
+        animateChipToPot(bbPlayer.id, bbAmount);
+    }, 100);
 }
 
 // 表示更新
@@ -1184,30 +1328,34 @@ function updateActionButtons() {
 // プレイヤーアクション
 function playerAction(action) {
     if (currentPlayerIndex !== 0) return;
-    
+
     const player = players[0];
-    
+
     switch(action) {
         case 'fold':
             player.folded = true;
             addLog(`${player.name} がフォールドしました`);
+            showActionIndicator(0, 'fold');
             playSound('click');
             break;
-            
+
         case 'check':
             addLog(`${player.name} がチェックしました`);
+            showActionIndicator(0, 'check');
             playSound('click');
             break;
-            
+
         case 'call':
             const callAmount = Math.min(currentBet - player.bet, player.chips);
             player.chips -= callAmount;
             player.bet += callAmount;
             pot += callAmount;
             addLog(`${player.name} が $${callAmount} をコールしました`);
+            showActionIndicator(0, 'call', callAmount);
+            animateChipToPot(0, callAmount);
             playSound('chips');
             break;
-            
+
         case 'raise':
             const raiseAmount = parseInt(document.getElementById('raiseAmount').textContent);
             const totalBet = raiseAmount - player.bet;
@@ -1220,9 +1368,11 @@ function playerAction(action) {
             pot += totalBet;
             currentBet = raiseAmount;
             addLog(`${player.name} が $${raiseAmount} にレイズしました`);
+            showActionIndicator(0, 'raise', raiseAmount);
+            animateChipToPot(0, totalBet);
             playSound('chips');
             break;
-            
+
         case 'allin':
             const allInAmount = player.chips;
             player.chips = 0;
@@ -1231,10 +1381,12 @@ function playerAction(action) {
             if (player.bet > currentBet) currentBet = player.bet;
             player.allIn = true;
             addLog(`${player.name} がオールイン！ $${allInAmount}`);
+            showActionIndicator(0, 'allin', allInAmount);
+            animateChipToPot(0, allInAmount);
             playSound('chips');
             break;
     }
-    
+
     updateDisplay();
     nextPlayer();
 }
@@ -1348,13 +1500,17 @@ function decideCpuAction(cpu) {
 
 // CPUアクション実行
 function executeCpuAction(cpu, action) {
+    const cpuIndex = cpu.id;
+
     switch(action.type) {
         case 'fold':
             cpu.folded = true;
             addLog(`${cpu.name} がフォールドしました`);
+            showActionIndicator(cpuIndex, 'fold');
             break;
         case 'check':
             addLog(`${cpu.name} がチェックしました`);
+            showActionIndicator(cpuIndex, 'check');
             break;
         case 'call':
             const callAmount = Math.min(currentBet - cpu.bet, cpu.chips);
@@ -1362,6 +1518,8 @@ function executeCpuAction(cpu, action) {
             cpu.bet += callAmount;
             pot += callAmount;
             addLog(`${cpu.name} が $${callAmount} をコールしました`);
+            showActionIndicator(cpuIndex, 'call', callAmount);
+            animateChipToPot(cpuIndex, callAmount);
             break;
         case 'raise':
             const raiseAmount = Math.min(action.amount, cpu.chips + cpu.bet);
@@ -1371,6 +1529,8 @@ function executeCpuAction(cpu, action) {
             pot += totalBet;
             currentBet = raiseAmount;
             addLog(`${cpu.name} が $${raiseAmount} にレイズしました`);
+            showActionIndicator(cpuIndex, 'raise', raiseAmount);
+            animateChipToPot(cpuIndex, totalBet);
             break;
     }
 }
@@ -1426,9 +1586,10 @@ function nextPhase() {
 function endRound() {
     const winner = players.find(p => p.isActive && !p.folded);
     winner.chips += pot;
-    addLog(`${winner.name} が $${pot} を獲得しました！`);
+    addLog(`🎉 ${winner.name} が $${pot} を獲得しました！`);
+    highlightWinner(winner.id);
     playSound('win');
-    
+
     setTimeout(() => {
         checkGameEnd();
     }, 3000);
@@ -1437,25 +1598,49 @@ function endRound() {
 // ショーダウン
 function showdown() {
     addLog('--- ショーダウン ---');
-    
+
     const activePlayers = players.filter(p => p.isActive && !p.folded);
     const hands = activePlayers.map(p => ({
         player: p,
         hand: evaluateHand(p.cards, communityCards)
     }));
-    
+
+    // 全員の手札を表示
+    activePlayers.forEach(p => {
+        const hand = hands.find(h => h.player.id === p.id).hand;
+        addLog(`${p.name}: ${hand.name} ${p.cards.map(c => c.value + c.suit).join(' ')}`);
+    });
+
     // 最強のハンドを見つける
     hands.sort((a, b) => compareHands(b.hand, a.hand));
-    
+
     const winner = hands[0].player;
     winner.chips += pot;
-    
-    addLog(`${winner.name} が ${hands[0].hand.name} で $${pot} を獲得しました！`);
+
+    addLog(`🎉 ${winner.name} が ${hands[0].hand.name} で $${pot} を獲得しました！`);
+    highlightWinner(winner.id);
+
+    // 全員のカードを表示
+    updateDisplay();
+    setTimeout(() => {
+        activePlayers.forEach(p => {
+            const cardsEl = document.getElementById(`cards-${p.id}`);
+            if (cardsEl && p.id !== 0) {
+                cardsEl.innerHTML = p.cards.map(card =>
+                    `<div class="card ${card.suitName}">
+                        <div class="card-value">${card.value}</div>
+                        <div class="card-suit">${card.suit}</div>
+                    </div>`
+                ).join('');
+            }
+        });
+    }, 500);
+
     playSound('win');
-    
+
     setTimeout(() => {
         checkGameEnd();
-    }, 4000);
+    }, 5000);
 }
 
 // ゲーム終了チェック
@@ -1514,11 +1699,83 @@ function addLog(message) {
     entry.className = 'log-entry';
     entry.textContent = message;
     logEl.insertBefore(entry, logEl.firstChild);
-    
+
     // 最大20エントリーまで
     while (logEl.children.length > 20) {
         logEl.removeChild(logEl.lastChild);
     }
+}
+
+// アクションインジケーター表示
+function showActionIndicator(playerIndex, actionType, amount = null) {
+    const infoEl = document.getElementById(`info-${playerIndex}`);
+    if (!infoEl) return;
+
+    // 既存のインジケーターを削除
+    const existing = infoEl.querySelector('.action-indicator');
+    if (existing) existing.remove();
+
+    const indicator = document.createElement('div');
+    indicator.className = `action-indicator ${actionType}`;
+
+    let text = actionType.toUpperCase();
+    if (amount !== null) {
+        text += ` $${amount}`;
+    }
+    indicator.textContent = text;
+
+    infoEl.appendChild(indicator);
+
+    // 2秒後に削除
+    setTimeout(() => {
+        if (indicator.parentNode) {
+            indicator.remove();
+        }
+    }, 2000);
+}
+
+// チップアニメーション
+function animateChipToPot(playerIndex, amount) {
+    const playerEl = document.getElementById(`player-${playerIndex}`);
+    const potEl = document.getElementById('potDisplay');
+    if (!playerEl || !potEl) {
+        console.warn(`Cannot animate chip: player-${playerIndex} or pot not found`);
+        return;
+    }
+
+    const playerRect = playerEl.getBoundingClientRect();
+    const potRect = potEl.getBoundingClientRect();
+
+    // 要素が画面上に表示されているか確認
+    if (playerRect.width === 0 || playerRect.height === 0) {
+        console.warn(`Player element not rendered yet: player-${playerIndex}`);
+        return;
+    }
+
+    const chip = document.createElement('div');
+    chip.className = 'chip-animation';
+    chip.textContent = '💰';
+    chip.style.position = 'fixed';
+    chip.style.left = (playerRect.left + playerRect.width / 2) + 'px';
+    chip.style.top = (playerRect.top + playerRect.height / 2) + 'px';
+    chip.style.setProperty('--tx', (potRect.left + potRect.width / 2 - playerRect.left - playerRect.width / 2) + 'px');
+    chip.style.setProperty('--ty', (potRect.top + potRect.height / 2 - playerRect.top - playerRect.height / 2) + 'px');
+
+    document.body.appendChild(chip);
+
+    setTimeout(() => chip.remove(), 1000);
+}
+
+// 勝者ハイライト
+function highlightWinner(playerIndex) {
+    const infoEl = document.getElementById(`info-${playerIndex}`);
+    if (!infoEl) return;
+
+    infoEl.classList.add('winner-glow');
+
+    setTimeout(() => {
+        infoEl.classList.remove('winner-glow');
+    }, 3000);
 }
 
 // ハンド評価（簡易版）
