@@ -161,16 +161,19 @@
 
         /* プレイヤー配置 */
         .player-seat {
-            position: absolute;
             width: 180px;
             text-align: center;
         }
 
-        .player-seat.seat-0 { bottom: -40px; left: 50%; transform: translateX(-50%); }
-        .player-seat.seat-1 { bottom: 20%; left: 5%; }
-        .player-seat.seat-2 { top: 10%; left: 15%; }
-        .player-seat.seat-3 { top: 10%; right: 15%; }
-        .player-seat.seat-4 { bottom: 20%; right: 5%; }
+        .player-seat {
+            position: absolute;
+        }
+
+        .player-seat.seat-0 { bottom: -60px; left: 50%; transform: translateX(-50%); z-index: 10; }
+        .player-seat.seat-1 { bottom: 15%; left: 2%; }
+        .player-seat.seat-2 { top: 5%; left: 10%; }
+        .player-seat.seat-3 { top: 5%; right: 10%; }
+        .player-seat.seat-4 { bottom: 15%; right: 2%; }
 
         .player-info {
             background: rgba(0, 0, 0, 0.85);
@@ -1081,7 +1084,7 @@ function startNewRound() {
         endGame(activePlayers[0]);
         return;
     }
-    
+
     // 状態リセット
     deck = createDeck();
     communityCards = [];
@@ -1089,7 +1092,7 @@ function startNewRound() {
     currentBet = 0;
     gamePhase = 'preflop';
     roundBets = players.map(() => 0);
-    
+
     players.forEach(player => {
         player.cards = [];
         player.bet = 0;
@@ -1098,30 +1101,33 @@ function startNewRound() {
         player.isDealer = false;
         player.isSmallBlind = false;
         player.isBigBlind = false;
+        player.hasActed = false;  // アクション済みフラグを追加
     });
-    
+
     // ディーラー・ブラインドを設定
     setPositions();
-    
+
     // カードを配る
     dealCards();
-    
+
     // ブラインドを徴収
     collectBlinds();
-    
-    // プリフロップ開始
-    currentPlayerIndex = (dealerPosition + 3) % players.length;
+
+    // プリフロップ開始（ビッグブラインドの次から）
+    let bbPos = players.findIndex(p => p.isBigBlind);
+    currentPlayerIndex = (bbPos + 1) % players.length;
+
     // スキップして次のアクティブプレイヤーへ
     while (!players[currentPlayerIndex].isActive || players[currentPlayerIndex].folded) {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     }
-    
+
     updateDisplay();
     playSound('shuffle');
     addLog('--- 新しいラウンド開始 ---');
-    
+
     if (currentPlayerIndex !== 0) {
-        setTimeout(() => cpuTurn(), 1000);
+        setTimeout(() => cpuTurn(), 1500);
     }
 }
 
@@ -1414,32 +1420,56 @@ function adjustRaise(direction) {
 
 // 次のプレイヤーへ
 function nextPlayer() {
-    const activePlayers = players.filter(p => p.isActive && !p.folded && !p.allIn);
-    
+    const activePlayers = players.filter(p => p.isActive && !p.folded);
+
     if (activePlayers.length === 1) {
         // 1人しか残っていない
         endRound();
         return;
     }
-    
-    // 全員がベットを揃えたかチェック
-    const allBetsEqual = activePlayers.every(p => p.bet === currentBet || p.allIn);
-    
+
+    // 次のアクティブプレイヤーを探す
+    let startIndex = currentPlayerIndex;
     let nextIndex = (currentPlayerIndex + 1) % players.length;
-    while (!players[nextIndex].isActive || players[nextIndex].folded || players[nextIndex].allIn) {
+
+    while (players[nextIndex].folded || !players[nextIndex].isActive || players[nextIndex].allIn) {
         nextIndex = (nextIndex + 1) % players.length;
-        if (nextIndex === currentPlayerIndex) break;
+        if (nextIndex === startIndex) {
+            // 全員がフォールドまたはオールイン
+            nextPhase();
+            return;
+        }
     }
-    
-    // 全員がアクション完了
-    if (allBetsEqual && nextIndex === currentPlayerIndex) {
+
+    // 全員がベットを揃えたかチェック（アクティブかつ未フォールドのプレイヤー）
+    const playersWhoCanBet = players.filter(p => p.isActive && !p.folded && !p.allIn);
+    const allBetsEqual = playersWhoCanBet.every(p => p.bet === currentBet);
+
+    // 全員アクション済みかチェック
+    if (allBetsEqual && nextIndex === startIndex) {
         nextPhase();
         return;
     }
-    
+
+    // 全員が同じベット額で、一周した場合
+    if (allBetsEqual && playersWhoCanBet.length > 0) {
+        // 最後にベットしたプレイヤーまで戻ってきたかチェック
+        let hasActed = true;
+        for (let p of playersWhoCanBet) {
+            if (p.bet !== currentBet) {
+                hasActed = false;
+                break;
+            }
+        }
+        if (hasActed && nextIndex <= startIndex) {
+            nextPhase();
+            return;
+        }
+    }
+
     currentPlayerIndex = nextIndex;
     updateDisplay();
-    
+
     if (currentPlayerIndex !== 0) {
         setTimeout(() => cpuTurn(), 1000);
     }
@@ -1537,9 +1567,20 @@ function executeCpuAction(cpu, action) {
 
 // 次のフェーズへ
 function nextPhase() {
-    players.forEach(p => p.bet = 0);
+    // ベットをリセット
+    players.forEach(p => {
+        p.bet = 0;
+        p.hasActed = false;
+    });
     currentBet = 0;
-    
+
+    // アクティブで未フォールドのプレイヤー数をチェック
+    const activePlayers = players.filter(p => p.isActive && !p.folded);
+    if (activePlayers.length === 1) {
+        endRound();
+        return;
+    }
+
     switch(gamePhase) {
         case 'preflop':
             // フロップ
@@ -1568,17 +1609,18 @@ function nextPhase() {
             showdown();
             return;
     }
-    
-    // 次のアクティブプレイヤーから開始
+
+    // 表示を更新してコミュニティカードを表示
+    updateDisplay();
+
+    // ディーラーの次から開始
     currentPlayerIndex = (dealerPosition + 1) % players.length;
     while (!players[currentPlayerIndex].isActive || players[currentPlayerIndex].folded || players[currentPlayerIndex].allIn) {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     }
-    
-    updateDisplay();
-    
+
     if (currentPlayerIndex !== 0) {
-        setTimeout(() => cpuTurn(), 1000);
+        setTimeout(() => cpuTurn(), 1500);
     }
 }
 
