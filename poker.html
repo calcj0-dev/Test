@@ -173,59 +173,74 @@
         .player-seat.seat-4 { bottom: 20%; right: 5%; }
 
         .player-info {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             border: 3px solid #ffd700;
             border-radius: 15px;
             padding: 15px 10px;
             margin-bottom: 10px;
+            transition: all 0.3s;
         }
 
         .player-info.active {
             border-color: #4caf50;
-            box-shadow: 0 0 20px #4caf50;
-            animation: pulse-border 1s infinite;
+            box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
+            animation: pulse-border 1.5s infinite;
+            transform: scale(1.05);
         }
 
         @keyframes pulse-border {
-            0%, 100% { border-color: #4caf50; }
-            50% { border-color: #8bc34a; }
+            0%, 100% {
+                border-color: #4caf50;
+                box-shadow: 0 0 25px rgba(76, 175, 80, 0.6);
+            }
+            50% {
+                border-color: #8bc34a;
+                box-shadow: 0 0 35px rgba(139, 195, 74, 0.8);
+            }
         }
 
         .player-info.folded {
-            opacity: 0.5;
+            opacity: 0.4;
             border-color: #666;
         }
 
         .player-info.all-in {
             border-color: #ff5722;
+            box-shadow: 0 0 20px rgba(255, 87, 34, 0.6);
         }
 
         .player-name {
             color: #ffd700;
             font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 5px;
+            font-size: 1.15em;
+            margin-bottom: 6px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
         .player-chips {
-            color: white;
-            font-size: 1.2em;
+            color: #fff;
+            font-size: 1.15em;
             margin: 5px 0;
+            font-weight: 500;
         }
 
         .player-bet {
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 0.9em;
+            background: rgba(255, 152, 0, 0.3);
+            color: #ffeb3b;
+            padding: 6px 8px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            margin-top: 4px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .player-status {
             color: #4caf50;
-            font-size: 0.85em;
-            margin-top: 5px;
+            font-size: 0.9em;
+            margin-top: 6px;
             font-style: italic;
+            font-weight: bold;
         }
 
         .dealer-button {
@@ -247,14 +262,17 @@
 
         .blind-indicator {
             position: absolute;
-            top: -15px;
-            left: -15px;
-            background: #f44336;
+            top: -12px;
+            left: -12px;
+            background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
             color: white;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
             font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            z-index: 10;
         }
 
         /* カード表示 */
@@ -265,39 +283,45 @@
         }
 
         .card {
-            width: 50px;
-            height: 70px;
+            width: 55px;
+            height: 77px;
             background: white;
             border: 2px solid #333;
-            border-radius: 5px;
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 1.2em;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
             position: relative;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
         }
 
         .card.back {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: 2px solid #4a6fa5;
         }
 
         .card.hearts, .card.diamonds {
-            color: #f44336;
+            color: #e53935;
         }
 
         .card.spades, .card.clubs {
-            color: #333;
+            color: #212121;
         }
 
         .card-suit {
-            font-size: 1em;
+            font-size: 1.1em;
         }
 
         .card-value {
-            font-size: 1.3em;
+            font-size: 1.4em;
         }
 
         /* コミュニティカード */
@@ -307,28 +331,61 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            min-height: 100px;
+            align-items: center;
         }
 
         .community-cards .card {
-            width: 60px;
-            height: 85px;
+            width: 70px;
+            height: 100px;
+            font-size: 1.4em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .community-cards .card .card-value {
+            font-size: 1.5em;
         }
 
         /* ポット */
         .pot-display {
             position: absolute;
-            top: 20%;
+            top: 15%;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #ffd700;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ffd700;
             border-radius: 15px;
             padding: 15px 30px;
             color: #ffd700;
             font-size: 1.5em;
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ブラインド情報 */
+        .blinds-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 0.95em;
+        }
+
+        .blinds-info div {
+            margin: 3px 0;
+        }
+
+        .blinds-label {
+            color: #ffd700;
+            font-weight: bold;
         }
 
         /* アクションパネル */
@@ -462,25 +519,32 @@
 
         /* ゲームログ */
         .game-log {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #555;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #666;
             border-radius: 10px;
             padding: 15px;
             max-width: 600px;
             margin: 20px auto;
-            max-height: 150px;
+            max-height: 180px;
             overflow-y: auto;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .log-entry {
-            color: white;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9em;
+            color: #e0e0e0;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.95em;
+            line-height: 1.4;
         }
 
         .log-entry:last-child {
             border-bottom: none;
+        }
+
+        .log-entry:first-child {
+            color: #ffeb3b;
+            font-weight: 500;
         }
 
         /* ハンドランキング */
@@ -586,20 +650,66 @@
             .poker-table {
                 aspect-ratio: 1;
             }
-            
+
             .player-seat {
                 width: 140px;
             }
 
             .card {
-                width: 40px;
-                height: 56px;
+                width: 45px;
+                height: 63px;
                 font-size: 0.9em;
             }
 
+            .community-cards {
+                gap: 8px;
+                padding: 10px 15px;
+            }
+
             .community-cards .card {
-                width: 50px;
-                height: 70px;
+                width: 55px;
+                height: 77px;
+            }
+
+            .pot-display {
+                font-size: 1.2em;
+                padding: 10px 20px;
+            }
+
+            .blinds-info {
+                font-size: 0.85em;
+                padding: 8px 15px;
+            }
+
+            .player-name {
+                font-size: 1em;
+            }
+
+            .player-chips {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: 38px;
+                height: 53px;
+            }
+
+            .community-cards .card {
+                width: 45px;
+                height: 63px;
+            }
+
+            .player-seat {
+                width: 120px;
+            }
+
+            .blinds-info {
+                top: 10px;
+                right: 10px;
+                font-size: 0.75em;
+                padding: 6px 10px;
             }
         }
     </style>
@@ -648,6 +758,10 @@
         <div class="poker-table" id="pokerTable">
             <!-- プレイヤー席（動的に生成） -->
             <div class="pot-display" id="potDisplay">Pot: $0</div>
+            <div class="blinds-info">
+                <div><span class="blinds-label">SB:</span> $<span id="sbAmount">100</span></div>
+                <div><span class="blinds-label">BB:</span> $<span id="bbAmount">200</span></div>
+            </div>
             <div class="community-cards" id="communityCards"></div>
         </div>
 
@@ -796,32 +910,27 @@ function initGame() {
     addLog('ゲーム開始！初期チップ: $' + INITIAL_CHIPS);
 }
 
-// プレイヤー表示を作成
+// プレイヤー表示を作成（初期化時のみ）
 function renderPlayers() {
     const table = document.getElementById('pokerTable');
     // 既存のプレイヤー席を削除
     document.querySelectorAll('.player-seat').forEach(el => el.remove());
-    
+
     players.forEach((player, index) => {
-        if (!player.isActive) return;
-        
         const seat = document.createElement('div');
         seat.className = `player-seat seat-${index}`;
         seat.id = `player-${index}`;
-        
+
         seat.innerHTML = `
             <div class="player-info" id="info-${index}">
-                ${player.isDealer ? '<div class="dealer-button">D</div>' : ''}
-                ${player.isSmallBlind ? '<div class="blind-indicator">SB</div>' : ''}
-                ${player.isBigBlind ? '<div class="blind-indicator">BB</div>' : ''}
                 <div class="player-name">${player.name}</div>
                 <div class="player-chips" id="chips-${index}">💰 $${player.chips}</div>
-                <div class="player-bet" id="bet-${index}">${player.bet > 0 ? 'Bet: $' + player.bet : ''}</div>
+                <div class="player-bet" id="bet-${index}"></div>
                 <div class="player-cards" id="cards-${index}"></div>
                 <div class="player-status" id="status-${index}"></div>
             </div>
         `;
-        
+
         table.appendChild(seat);
     });
 }
@@ -964,41 +1073,73 @@ function collectBlinds() {
 function updateDisplay() {
     // ポット表示
     document.getElementById('potDisplay').textContent = `Pot: $${pot}`;
-    
+
     // プレイヤー情報更新
     players.forEach((player, index) => {
         if (!player.isActive) return;
-        
+
         const infoEl = document.getElementById(`info-${index}`);
         if (infoEl) {
             infoEl.className = 'player-info';
             if (index === currentPlayerIndex) infoEl.classList.add('active');
             if (player.folded) infoEl.classList.add('folded');
             if (player.allIn) infoEl.classList.add('all-in');
+
+            // ディーラーボタンの更新
+            const existingDealer = infoEl.querySelector('.dealer-button');
+            if (player.isDealer && !existingDealer) {
+                const dealerBtn = document.createElement('div');
+                dealerBtn.className = 'dealer-button';
+                dealerBtn.textContent = 'D';
+                infoEl.appendChild(dealerBtn);
+            } else if (!player.isDealer && existingDealer) {
+                existingDealer.remove();
+            }
+
+            // ブラインドインジケーターの更新
+            const existingBlind = infoEl.querySelector('.blind-indicator');
+            if (existingBlind) existingBlind.remove();
+            if (player.isSmallBlind) {
+                const blindInd = document.createElement('div');
+                blindInd.className = 'blind-indicator';
+                blindInd.textContent = 'SB';
+                infoEl.appendChild(blindInd);
+            } else if (player.isBigBlind) {
+                const blindInd = document.createElement('div');
+                blindInd.className = 'blind-indicator';
+                blindInd.textContent = 'BB';
+                infoEl.appendChild(blindInd);
+            }
         }
-        
-        document.getElementById(`chips-${index}`).textContent = `💰 $${player.chips}`;
-        document.getElementById(`bet-${index}`).textContent = player.bet > 0 ? `Bet: $${player.bet}` : '';
-        
+
+        const chipsEl = document.getElementById(`chips-${index}`);
+        if (chipsEl) chipsEl.textContent = `💰 $${player.chips}`;
+
+        const betEl = document.getElementById(`bet-${index}`);
+        if (betEl) betEl.textContent = player.bet > 0 ? `Bet: $${player.bet}` : '';
+
         // カード表示
         const cardsEl = document.getElementById(`cards-${index}`);
         if (cardsEl) {
-            if (index === 0 && player.cards.length > 0) {
+            if (player.folded) {
+                // フォールドしたらカードを消す
+                cardsEl.innerHTML = '';
+            } else if (index === 0 && player.cards.length > 0) {
                 // プレイヤーのカードは表示
-                cardsEl.innerHTML = player.cards.map(card => 
+                cardsEl.innerHTML = player.cards.map(card =>
                     `<div class="card ${card.suitName}">
                         <div class="card-value">${card.value}</div>
                         <div class="card-suit">${card.suit}</div>
                     </div>`
                 ).join('');
-            } else if (player.cards.length > 0 && !player.folded) {
+            } else if (player.cards.length > 0) {
                 // CPUのカードは裏向き
                 cardsEl.innerHTML = '<div class="card back"></div><div class="card back"></div>';
             } else {
                 cardsEl.innerHTML = '';
             }
         }
-        
+
         // ステータス表示
         const statusEl = document.getElementById(`status-${index}`);
         if (statusEl) {
@@ -1007,20 +1148,20 @@ function updateDisplay() {
             else statusEl.textContent = '';
         }
     });
-    
+
     // コミュニティカード表示
     const communityEl = document.getElementById('communityCards');
-    communityEl.innerHTML = communityCards.map(card =>
-        `<div class="card ${card.suitName}">
-            <div class="card-value">${card.value}</div>
-            <div class="card-suit">${card.suit}</div>
-        </div>`
-    ).join('');
-    
+    if (communityEl) {
+        communityEl.innerHTML = communityCards.map(card =>
+            `<div class="card ${card.suitName}">
+                <div class="card-value">${card.value}</div>
+                <div class="card-suit">${card.suit}</div>
+            </div>`
+        ).join('');
+    }
+
     // アクションボタンの有効/無効
     updateActionButtons();
-    
-    renderPlayers();
 }
 
 // アクションボタンの更新
