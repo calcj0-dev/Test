@@ -170,8 +170,8 @@
             background: radial-gradient(ellipse at center, #2d5016 0%, #1a3d0f 100%);
             border: 15px solid #8b4513;
             border-radius: 50%;
-            aspect-ratio: 16/10;
-            max-width: 1000px;
+            width: 1000px;
+            height: 625px;
             margin: 0 auto 30px;
             position: relative;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(0, 0, 0, 0.3);
@@ -220,30 +220,30 @@
 
         .turn-indicator {
             position: absolute;
-            top: -50px;
+            top: -32px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
             color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 1.2em;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
             font-weight: bold;
             white-space: nowrap;
             animation: turnIndicatorPulse 1.5s ease-in-out infinite;
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.6);
-            border: 3px solid white;
+            box-shadow: 0 3px 12px rgba(76, 175, 80, 0.6);
+            border: 2px solid white;
             z-index: 250;
         }
 
         @keyframes turnIndicatorPulse {
             0%, 100% {
                 transform: translateX(-50%) scale(1);
-                box-shadow: 0 5px 20px rgba(76, 175, 80, 0.6);
+                box-shadow: 0 3px 12px rgba(76, 175, 80, 0.6);
             }
             50% {
-                transform: translateX(-50%) scale(1.1);
-                box-shadow: 0 8px 30px rgba(76, 175, 80, 0.9);
+                transform: translateX(-50%) scale(1.05);
+                box-shadow: 0 5px 18px rgba(76, 175, 80, 0.8);
             }
         }
 
@@ -992,9 +992,17 @@
         }
 
         /* レスポンシブ */
-        @media (max-width: 900px) {
+        @media (max-width: 1050px) {
             .poker-table {
-                aspect-ratio: 1;
+                width: 900px;
+                height: 562px;
+            }
+        }
+
+        @media (max-width: 950px) {
+            .poker-table {
+                width: 800px;
+                height: 500px;
             }
 
             .player-seat {
