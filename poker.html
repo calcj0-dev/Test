@@ -182,15 +182,15 @@
         /* プレイヤー配置 */
         .player-seat {
             position: absolute;
-            width: 220px;
+            width: 350px;
             text-align: center;
         }
 
         .player-seat.seat-0 { bottom: -90px; left: 50%; transform: translateX(-50%); z-index: 10; }
-        .player-seat.seat-1 { bottom: 30%; left: 3%; }
-        .player-seat.seat-2 { top: 8%; left: 6%; }
-        .player-seat.seat-3 { top: 8%; right: 6%; }
-        .player-seat.seat-4 { bottom: 30%; right: 3%; }
+        .player-seat.seat-1 { bottom: 30%; left: -2%; }
+        .player-seat.seat-2 { top: 8%; left: 2%; }
+        .player-seat.seat-3 { top: 8%; right: 2%; }
+        .player-seat.seat-4 { bottom: 30%; right: -2%; }
 
         .player-info {
             background: rgba(0, 0, 0, 0.85);
@@ -213,6 +213,7 @@
             gap: 5px;
             flex: 1;
             min-width: 0;
+            max-width: 150px;
         }
 
         .player-info.active {
