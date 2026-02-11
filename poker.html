@@ -115,6 +115,24 @@
             font-weight: bold;
         }
 
+        .info-toggle-btn {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+            margin-right: 15px;
+        }
+
+        .info-toggle-btn:hover {
+            background: rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
         .sound-controls {
             display: flex;
             align-items: center;
@@ -197,6 +215,35 @@
             50% {
                 border-color: #8bc34a;
                 box-shadow: 0 0 35px rgba(139, 195, 74, 0.8);
+            }
+        }
+
+        .turn-indicator {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: turnIndicatorPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.6);
+            border: 3px solid white;
+            z-index: 250;
+        }
+
+        @keyframes turnIndicatorPulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 5px 20px rgba(76, 175, 80, 0.6);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                box-shadow: 0 8px 30px rgba(76, 175, 80, 0.9);
             }
         }
 
@@ -755,6 +802,11 @@
             max-height: 180px;
             overflow-y: auto;
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .game-log.visible {
+            display: block;
         }
 
         .log-entry {
@@ -783,6 +835,11 @@
             max-width: 400px;
             margin: 20px auto;
             color: white;
+            display: none;
+        }
+
+        .hand-ranking.visible {
+            display: block;
         }
 
         .hand-ranking h3 {
@@ -1051,7 +1108,10 @@
     <!-- ゲーム画面 -->
     <div id="gameScreen">
         <div class="game-header">
-            <div class="game-title">🎰 Texas Hold'em</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="game-title">🎰 Texas Hold'em</div>
+                <button class="info-toggle-btn" onclick="toggleInfo()">📊 情報表示</button>
+            </div>
             <div class="sound-controls">
                 <button id="soundToggle" class="sound-toggle" onclick="toggleSound()">🔊 ON</button>
                 <div class="volume-control">
@@ -1156,6 +1216,8 @@ let gamePhase = 'preflop'; // preflop, flop, turn, river, showdown
 let roundBets = [];
 let soundEnabled = true;
 let volume = 0.5;
+let justDealtCards = false; // カードが配られた直後かどうか
+let newCommunityCards = []; // 新しく追加されたコミュニティカード
 
 // サウンド設定
 function toggleSound() {
@@ -1368,21 +1430,7 @@ function dealCards() {
         }
     });
 
-    // カード配布アニメーション
-    setTimeout(() => {
-        players.forEach((player, playerIndex) => {
-            if (player.isActive && !player.folded) {
-                const cardsEl = document.getElementById(`cards-${playerIndex}`);
-                if (cardsEl) {
-                    const cards = cardsEl.querySelectorAll('.card');
-                    cards.forEach((card, cardIndex) => {
-                        card.classList.add('initial-deal');
-                        card.style.animationDelay = `${playerIndex * 0.15 + cardIndex * 0.1}s`;
-                    });
-                }
-            }
-        });
-    }, 100);
+    justDealtCards = true; // カード配布フラグを立てる
 }
 
 // ブラインド徴収
@@ -1454,6 +1502,17 @@ function updateDisplay() {
                 blindInd.textContent = 'BB';
                 infoEl.appendChild(blindInd);
             }
+
+            // ターンインジケーター
+            const existingTurnInd = infoEl.querySelector('.turn-indicator');
+            if (existingTurnInd) existingTurnInd.remove();
+
+            if (index === currentPlayerIndex && !player.folded && player.isActive) {
+                const turnInd = document.createElement('div');
+                turnInd.className = 'turn-indicator';
+                turnInd.textContent = index === 0 ? '🎯 YOUR TURN' : `🎯 ${player.name} TURN`;
+                infoEl.appendChild(turnInd);
+            }
         }
 
         const chipsEl = document.getElementById(`chips-${index}`);
@@ -1470,15 +1529,19 @@ function updateDisplay() {
                 cardsEl.innerHTML = '';
             } else if (index === 0 && player.cards.length > 0) {
                 // プレイヤーのカードは表示
-                cardsEl.innerHTML = player.cards.map(card =>
-                    `<div class="card ${card.suitName}">
+                const animClass = justDealtCards ? 'initial-deal' : '';
+                cardsEl.innerHTML = player.cards.map((card, cardIdx) =>
+                    `<div class="card ${card.suitName} ${animClass}" style="${justDealtCards ? `animation-delay: ${index * 0.15 + cardIdx * 0.1}s` : ''}">
                         <div class="card-value">${card.value}</div>
                         <div class="card-suit">${card.suit}</div>
                     </div>`
                 ).join('');
             } else if (player.cards.length > 0) {
                 // CPUのカードは裏向き
-                cardsEl.innerHTML = '<div class="card back"></div><div class="card back"></div>';
+                const animClass = justDealtCards ? 'initial-deal' : '';
+                cardsEl.innerHTML = player.cards.map((card, cardIdx) =>
+                    `<div class="card back ${animClass}" style="${justDealtCards ? `animation-delay: ${index * 0.15 + cardIdx * 0.1}s` : ''}"></div>`
+                ).join('');
             } else {
                 cardsEl.innerHTML = '';
             }
@@ -1500,7 +1563,10 @@ function updateDisplay() {
         for (let i = 0; i < 5; i++) {
             if (i < communityCards.length) {
                 const card = communityCards[i];
-                cardsHtml += `<div class="card ${card.suitName}">
+                const isNewCard = newCommunityCards.includes(i);
+                const animClass = isNewCard ? 'deal-animation' : '';
+                const animDelay = isNewCard ? `animation-delay: ${newCommunityCards.indexOf(i) * 0.2}s` : '';
+                cardsHtml += `<div class="card ${card.suitName} ${animClass}" style="${animDelay}">
                     <div class="card-value">${card.value}</div>
                     <div class="card-suit">${card.suit}</div>
                 </div>`;
@@ -1513,6 +1579,13 @@ function updateDisplay() {
 
     // アクションボタンの有効/無効
     updateActionButtons();
+
+    // カード配布フラグをリセット
+    if (justDealtCards) {
+        setTimeout(() => {
+            justDealtCards = false;
+        }, 2000);
+    }
 }
 
 // アクションボタンの更新
@@ -1795,13 +1868,16 @@ function nextPhase() {
     switch(gamePhase) {
         case 'preflop':
             // フロップ
-            communityCards = [deck.pop(), deck.pop(), deck.pop()];
+            const flopCards = [deck.pop(), deck.pop(), deck.pop()];
+            newCommunityCards = [0, 1, 2]; // 新しく追加されたカードのインデックス
+            communityCards = flopCards;
             gamePhase = 'flop';
             addLog('--- フロップ ---');
             playSound('card');
             break;
         case 'flop':
             // ターン
+            newCommunityCards = [communityCards.length]; // 新しく追加されたカードのインデックス
             communityCards.push(deck.pop());
             gamePhase = 'turn';
             addLog('--- ターン ---');
@@ -1809,6 +1885,7 @@ function nextPhase() {
             break;
         case 'turn':
             // リバー
+            newCommunityCards = [communityCards.length]; // 新しく追加されたカードのインデックス
             communityCards.push(deck.pop());
             gamePhase = 'river';
             addLog('--- リバー ---');
@@ -1824,19 +1901,10 @@ function nextPhase() {
     // 表示を更新してコミュニティカードを表示
     updateDisplay();
 
-    // カード配置アニメーション
+    // 新しいカードのアニメーション実行後、フラグをクリア
     setTimeout(() => {
-        const communityEl = document.getElementById('communityCards');
-        if (communityEl) {
-            const cards = communityEl.querySelectorAll('.card:not(.card-placeholder)');
-            cards.forEach((card, idx) => {
-                if (!card.classList.contains('deal-animation')) {
-                    card.classList.add('deal-animation');
-                    card.style.animationDelay = `${idx * 0.15}s`;
-                }
-            });
-        }
-    }, 50);
+        newCommunityCards = [];
+    }, 1000);
 
     // ディーラーの次のアクティブプレイヤーから開始
     currentPlayerIndex = (dealerPosition + 1) % players.length;
@@ -2124,6 +2192,15 @@ function showNextRoundPrompt(title, text) {
 function proceedToNextRound() {
     document.getElementById('nextRoundOverlay').style.display = 'none';
     checkGameEnd();
+}
+
+// 情報表示の切り替え
+function toggleInfo() {
+    const log = document.getElementById('gameLog');
+    const ranking = document.querySelector('.hand-ranking');
+
+    log.classList.toggle('visible');
+    ranking.classList.toggle('visible');
 }
 
 console.log('Texas Hold\'em Poker loaded successfully!');
