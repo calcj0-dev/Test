@@ -15,7 +15,9 @@
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #0f4c29 0%, #1a5f3f 100%);
             min-height: 100vh;
-            overflow-x: hidden;
+            min-width: 1440px;
+            overflow-x: auto;
+            overflow-y: auto;
         }
 
         /* 難易度選択画面 */
@@ -94,8 +96,11 @@
         #gameScreen {
             display: none;
             padding: 20px;
-            max-width: 1400px;
+            width: 1400px;
+            min-width: 1400px;
+            min-height: 900px;
             margin: 0 auto;
+            overflow: visible;
         }
 
         /* ヘッダー */
@@ -188,8 +193,8 @@
 
         .player-seat.seat-0 { bottom: -90px; left: 50%; transform: translateX(-50%); z-index: 10; }
         .player-seat.seat-1 { bottom: 38%; left: -2%; }
-        .player-seat.seat-2 { top: 8%; left: 2%; }
-        .player-seat.seat-3 { top: 8%; right: 2%; }
+        .player-seat.seat-2 { top: 12%; left: 2%; }
+        .player-seat.seat-3 { top: 12%; right: 2%; }
         .player-seat.seat-4 { bottom: 38%; right: -2%; }
 
         .player-info {
@@ -642,7 +647,7 @@
         /* ポット */
         .pot-display {
             position: absolute;
-            top: 15%;
+            top: 10%;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.9);
@@ -658,8 +663,8 @@
         /* ブラインド情報 */
         .blinds-info {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            bottom: 20px;
+            right: 20px;
             background: rgba(0, 0, 0, 0.8);
             border: 1px solid #ff9800;
             border-radius: 10px;
