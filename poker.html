@@ -29,8 +29,8 @@
 
         .screen-container {
             background: rgba(255, 255, 255, 0.95);
-            padding: 27px;
-            border-radius: 13px;
+            padding: 40px;
+            border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             text-align: center;
             max-width: 400px;
@@ -38,7 +38,7 @@
 
         h1 {
             color: #0f4c29;
-            margin-bottom: 7px;
+            margin-bottom: 10px;
             font-size: 2em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -46,33 +46,33 @@
         h2 {
             color: #666;
             margin-bottom: 20px;
-            font-size: 0.87em;
+            font-size: 1.3em;
         }
 
         .difficulty-buttons {
             display: flex;
             flex-direction: column;
-            gap: 13px;
+            gap: 20px;
             margin-bottom: 20px;
         }
 
         .difficulty-btn {
             background: white;
             border: 2px solid #e0e0e0;
-            padding: 17px;
+            padding: 25px;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 7px;
-            font-size: 0.67em;
+            gap: 10px;
+            font-size: 1em;
         }
 
         .difficulty-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 7px 17px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         .difficulty-btn.easy:hover { border-color: #4caf50; }
@@ -86,7 +86,7 @@
             color: #333;
         }
         .diff-desc {
-            font-size: 0.6em;
+            font-size: 0.9em;
             color: #666;
         }
 
@@ -103,15 +103,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 13px;
+            margin-bottom: 20px;
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px 17px;
-            border-radius: 7px;
+            padding: 15px 25px;
+            border-radius: 10px;
         }
 
         .game-title {
             color: #ffd700;
-            font-size: 1.2em;
+            font-size: 1.8em;
             font-weight: bold;
         }
 
@@ -119,11 +119,11 @@
             background: rgba(255, 215, 0, 0.2);
             color: #ffd700;
             border: 1px solid #ffd700;
-            padding: 7px 13px;
-            border-radius: 7px;
+            padding: 10px 20px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.67em;
+            font-size: 1em;
             transition: all 0.3s;
             margin-right: 10px;
         }
@@ -143,11 +143,11 @@
             background: #4caf50;
             color: white;
             border: none;
-            padding: 5px 13px;
-            border-radius: 13px;
+            padding: 8px 20px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.67em;
+            font-size: 1em;
             transition: all 0.3s;
         }
 
@@ -158,19 +158,19 @@
         .volume-control {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 10px;
             color: white;
-            font-size: 0.67em;
+            font-size: 1em;
         }
 
         .volume-slider {
-            width: 67px;
+            width: 100px;
         }
 
         /* ポーカーテーブル */
         .poker-table {
             background: radial-gradient(ellipse at center, #2d5016 0%, #1a3d0f 100%);
-            border: 10px solid #8b4513;
+            border: 15px solid #8b4513;
             border-radius: 50%;
             width: 1000px;
             height: 625px;
@@ -182,35 +182,35 @@
         /* プレイヤー配置 */
         .player-seat {
             position: absolute;
-            width: 150px;
+            width: 220px;
             text-align: center;
         }
 
-        .player-seat.seat-0 { bottom: -60px; left: 50%; transform: translateX(-50%); z-index: 10; }
-        .player-seat.seat-1 { bottom: 32%; left: 3%; }
-        .player-seat.seat-2 { top: 10%; left: 6%; }
-        .player-seat.seat-3 { top: 10%; right: 6%; }
-        .player-seat.seat-4 { bottom: 32%; right: 3%; }
+        .player-seat.seat-0 { bottom: -90px; left: 50%; transform: translateX(-50%); z-index: 10; }
+        .player-seat.seat-1 { bottom: 30%; left: 3%; }
+        .player-seat.seat-2 { top: 8%; left: 6%; }
+        .player-seat.seat-3 { top: 8%; right: 6%; }
+        .player-seat.seat-4 { bottom: 30%; right: 3%; }
 
         .player-info {
             background: rgba(0, 0, 0, 0.85);
             border: 2px solid #ffd700;
             border-radius: 10px;
-            padding: 8px 10px;
-            margin-bottom: 7px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
             transition: all 0.3s;
             position: relative;
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
         .player-info-column {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 3px;
+            gap: 5px;
             flex: 1;
             min-width: 0;
         }
@@ -235,14 +235,14 @@
 
         .turn-indicator {
             position: absolute;
-            top: -22px;
+            top: -33px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
             color: white;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.57em;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
             font-weight: bold;
             white-space: nowrap;
             animation: turnIndicatorPulse 1.5s ease-in-out infinite;
@@ -273,7 +273,7 @@
         }
 
         .player-avatar {
-            font-size: 1.67em;
+            font-size: 2.5em;
             filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
             flex-shrink: 0;
         }
@@ -281,23 +281,23 @@
         .player-name {
             color: #ffd700;
             font-weight: bold;
-            font-size: 0.77em;
+            font-size: 1.15em;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
             white-space: nowrap;
         }
 
         .player-chips {
             color: #fff;
-            font-size: 0.77em;
+            font-size: 1.15em;
             font-weight: 500;
         }
 
         .player-bet {
             background: rgba(255, 152, 0, 0.4);
             color: #ffeb3b;
-            padding: 4px 8px;
-            border-radius: 7px;
-            font-size: 0.87em;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 1.3em;
             font-weight: bold;
             border: 1px solid rgba(255, 215, 0, 0.5);
             box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
@@ -305,7 +305,7 @@
 
         .player-status {
             color: #4caf50;
-            font-size: 0.6em;
+            font-size: 0.9em;
             font-style: italic;
             font-weight: bold;
         }
@@ -317,9 +317,9 @@
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.95);
             color: white;
-            padding: 7px 10px;
-            border-radius: 7px;
-            font-size: 0.67em;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 1em;
             font-weight: bold;
             white-space: nowrap;
             animation: actionPop 0.5s ease-out;
@@ -365,14 +365,14 @@
 
         .win-badge {
             position: absolute;
-            top: -27px;
+            top: -40px;
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
             color: #000;
-            padding: 8px 16px;
-            border-radius: 17px;
-            font-size: 0.93em;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.4em;
             font-weight: bold;
             white-space: nowrap;
             animation: winBadgeAppear 0.6s ease-out;
@@ -397,14 +397,14 @@
 
         .hand-badge {
             position: absolute;
-            bottom: -23px;
+            bottom: -35px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.95);
             color: #ffd700;
-            padding: 5px 11px;
-            border-radius: 10px;
-            font-size: 0.73em;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 1.1em;
             font-weight: bold;
             white-space: nowrap;
             animation: handBadgeAppear 0.8s ease-out;
@@ -425,7 +425,7 @@
 
         .chip-animation {
             position: absolute;
-            font-size: 2.33em;
+            font-size: 3.5em;
             animation: chipToPot 1.2s ease-in-out forwards;
             pointer-events: none;
             z-index: 50;
@@ -446,30 +446,30 @@
         .dealer-button {
             background: white;
             color: #0f4c29;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 0.7em;
+            font-size: 1em;
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: -15px;
+            right: -15px;
             border: 1px solid #ffd700;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
         .blind-indicator {
             position: absolute;
-            top: -8px;
-            left: -8px;
+            top: -12px;
+            left: -12px;
             background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
             color: white;
-            padding: 3px 7px;
-            border-radius: 8px;
-            font-size: 0.53em;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
             font-weight: bold;
             border: 1px solid white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
@@ -479,14 +479,14 @@
         /* カード表示 */
         .player-cards {
             display: flex;
-            gap: 3px;
+            gap: 5px;
             justify-content: center;
             flex-shrink: 0;
         }
 
         .card {
-            width: 43px;
-            height: 60px;
+            width: 65px;
+            height: 90px;
             background: white;
             border: 1px solid #333;
             border-radius: 5px;
@@ -495,7 +495,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 0.87em;
+            font-size: 1.3em;
             box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
             position: relative;
             transition: transform 0.3s ease;
@@ -596,11 +596,11 @@
         }
 
         .card-suit {
-            font-size: 0.73em;
+            font-size: 1.1em;
         }
 
         .card-value {
-            font-size: 0.93em;
+            font-size: 1.4em;
         }
 
         /* コミュニティカード */
@@ -610,32 +610,32 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: flex;
-            gap: 8px;
-            padding: 10px 13px;
+            gap: 12px;
+            padding: 15px 20px;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 10px;
-            min-height: 87px;
+            min-height: 130px;
             align-items: center;
             border: 1px dashed rgba(255, 255, 255, 0.2);
         }
 
         .card-placeholder {
-            width: 53px;
-            height: 73px;
+            width: 80px;
+            height: 110px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed rgba(255, 255, 255, 0.3);
             border-radius: 5px;
         }
 
         .community-cards .card {
-            width: 53px;
-            height: 73px;
-            font-size: 1em;
+            width: 80px;
+            height: 110px;
+            font-size: 1.5em;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
         }
 
         .community-cards .card .card-value {
-            font-size: 1.07em;
+            font-size: 1.6em;
         }
 
         /* ポット */
@@ -647,9 +647,9 @@
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #ffd700;
             border-radius: 10px;
-            padding: 10px 20px;
+            padding: 15px 30px;
             color: #ffd700;
-            font-size: 1em;
+            font-size: 1.5em;
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
@@ -657,14 +657,14 @@
         /* ブラインド情報 */
         .blinds-info {
             position: absolute;
-            top: 13px;
-            left: 13px;
+            top: 20px;
+            left: 20px;
             background: rgba(0, 0, 0, 0.8);
             border: 1px solid #ff9800;
-            border-radius: 7px;
-            padding: 8px 13px;
+            border-radius: 10px;
+            padding: 12px 20px;
             color: white;
-            font-size: 0.63em;
+            font-size: 0.95em;
         }
 
         .blinds-info div {
@@ -709,7 +709,7 @@
             background: rgba(0, 0, 0, 0.8);
             border: 2px solid #ffd700;
             border-radius: 10px;
-            padding: 13px;
+            padding: 20px;
             max-width: 400px;
             margin: 0 auto;
         }
@@ -717,7 +717,7 @@
         .action-buttons {
             display: flex;
             gap: 10px;
-            margin-bottom: 13px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -725,11 +725,11 @@
         .action-btn {
             flex: 1;
             min-width: 80px;
-            padding: 10px 13px;
-            font-size: 0.73em;
+            padding: 15px 20px;
+            font-size: 1.1em;
             font-weight: bold;
             border: none;
-            border-radius: 7px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
@@ -781,17 +781,17 @@
         .raise-amount {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 10px;
             background: rgba(255, 255, 255, 0.1);
-            padding: 7px 10px;
-            border-radius: 7px;
+            padding: 10px 15px;
+            border-radius: 10px;
         }
 
         .amount-display {
             color: #ffd700;
-            font-size: 1em;
+            font-size: 1.5em;
             font-weight: bold;
-            min-width: 67px;
+            min-width: 100px;
             text-align: center;
         }
 
@@ -799,10 +799,10 @@
             background: #4caf50;
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            padding: 8px 15px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 0.67em;
+            font-size: 1em;
             font-weight: bold;
         }
 
@@ -812,7 +812,7 @@
 
         .increment-selector {
             display: flex;
-            gap: 7px;
+            gap: 10px;
         }
 
         .increment-radio {
@@ -822,11 +822,11 @@
         .increment-label {
             background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 5px 13px;
-            border-radius: 13px;
+            padding: 8px 20px;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.67em;
+            font-size: 1em;
         }
 
         .increment-radio:checked + .increment-label {
@@ -838,11 +838,11 @@
         .game-log {
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid #666;
-            border-radius: 7px;
-            padding: 10px;
+            border-radius: 10px;
+            padding: 15px;
             max-width: 400px;
-            margin: 13px auto;
-            max-height: 120px;
+            margin: 20px auto;
+            max-height: 180px;
             overflow-y: auto;
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
             display: none;
@@ -854,9 +854,9 @@
 
         .log-entry {
             color: #e0e0e0;
-            padding: 4px 5px;
+            padding: 6px 8px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.63em;
+            font-size: 0.95em;
             line-height: 1.4;
         }
 
@@ -873,10 +873,10 @@
         .hand-ranking {
             background: rgba(0, 0, 0, 0.8);
             border: 1px solid #ffd700;
-            border-radius: 7px;
-            padding: 10px;
-            max-width: 267px;
-            margin: 13px auto;
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 400px;
+            margin: 20px auto;
             color: white;
             display: none;
         }
@@ -887,27 +887,27 @@
 
         .hand-ranking h3 {
             color: #ffd700;
-            margin-bottom: 7px;
+            margin-bottom: 10px;
             text-align: center;
-            font-size: 1em;
+            font-size: 1.5em;
         }
 
         .hand-list {
-            font-size: 0.6em;
+            font-size: 0.9em;
             line-height: 1.8;
         }
 
         .back-btn {
             display: inline-block;
-            margin-top: 13px;
-            padding: 8px 20px;
+            margin-top: 20px;
+            padding: 12px 30px;
             background: #e0e0e0;
             color: #333;
             text-decoration: none;
-            border-radius: 33px;
+            border-radius: 50px;
             transition: all 0.3s;
             font-weight: bold;
-            font-size: 0.67em;
+            font-size: 1em;
         }
 
         .back-btn:hover {
@@ -946,8 +946,8 @@
 
         .next-round-message {
             background: linear-gradient(135deg, #1a5f3f 0%, #0f4c29 100%);
-            padding: 27px 40px;
-            border-radius: 13px;
+            padding: 40px 60px;
+            border-radius: 20px;
             text-align: center;
             border: 2px solid #ffd700;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
@@ -965,20 +965,20 @@
 
         .next-round-message h2 {
             color: #ffd700;
-            font-size: 1.33em;
+            font-size: 2em;
             margin-bottom: 10px;
         }
 
         .next-round-message p {
             color: white;
-            font-size: 0.8em;
-            margin: 7px 0;
+            font-size: 1.2em;
+            margin: 10px 0;
         }
 
         .click-hint {
             color: #ffeb3b;
-            font-size: 1em;
-            margin-top: 13px;
+            font-size: 1.5em;
+            margin-top: 20px;
             animation: blink 1.5s ease-in-out infinite;
         }
 
@@ -993,19 +993,19 @@
 
         .result-content {
             background: white;
-            padding: 27px;
-            border-radius: 13px;
+            padding: 40px;
+            border-radius: 20px;
             text-align: center;
-            max-width: 333px;
+            max-width: 500px;
         }
 
         .result-title {
             font-size: 2em;
-            margin-bottom: 13px;
+            margin-bottom: 20px;
         }
 
         .result-message {
-            font-size: 0.87em;
+            font-size: 1.3em;
             color: #666;
             margin-bottom: 20px;
         }
@@ -1017,11 +1017,11 @@
         }
 
         .result-btn {
-            padding: 10px 27px;
-            font-size: 0.73em;
+            padding: 15px 40px;
+            font-size: 1.1em;
             font-weight: bold;
             border: none;
-            border-radius: 33px;
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s;
         }
