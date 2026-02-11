@@ -232,14 +232,15 @@
         }
 
         .player-bet {
-            background: rgba(255, 152, 0, 0.3);
+            background: rgba(255, 152, 0, 0.4);
             color: #ffeb3b;
-            padding: 6px 8px;
-            border-radius: 8px;
-            font-size: 0.95em;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 1.3em;
             font-weight: bold;
-            margin-top: 4px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            margin-top: 6px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
         }
 
         .player-status {
@@ -303,12 +304,73 @@
             }
         }
 
+        .win-badge {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.4em;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: winBadgeAppear 0.6s ease-out;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.6);
+            border: 3px solid #fff;
+            z-index: 200;
+        }
+
+        @keyframes winBadgeAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.3) translateY(30px);
+            }
+            60% {
+                transform: translateX(-50%) scale(1.2) translateY(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1) translateY(0);
+            }
+        }
+
+        .hand-badge {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: #ffd700;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            white-space: nowrap;
+            animation: handBadgeAppear 0.8s ease-out;
+            border: 2px solid #ffd700;
+            z-index: 150;
+        }
+
+        @keyframes handBadgeAppear {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
         .chip-animation {
             position: absolute;
-            font-size: 1.5em;
-            animation: chipToPot 1s ease-in-out forwards;
+            font-size: 3.5em;
+            animation: chipToPot 1.2s ease-in-out forwards;
             pointer-events: none;
             z-index: 50;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
         }
 
         @keyframes chipToPot {
@@ -382,11 +444,49 @@
         @keyframes cardAppear {
             from {
                 opacity: 0;
-                transform: scale(0.8) translateY(-20px);
+                transform: scale(0.3) translateY(-50px) rotateY(90deg);
             }
             to {
                 opacity: 1;
-                transform: scale(1) translateY(0);
+                transform: scale(1) translateY(0) rotateY(0deg);
+            }
+        }
+
+        .card.deal-animation {
+            animation: cardDeal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes cardDeal {
+            0% {
+                opacity: 0;
+                transform: scale(0.2) translateY(-100px) rotate(-20deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.1) translateY(5px) rotate(3deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotate(0deg);
+            }
+        }
+
+        .card.initial-deal {
+            animation: cardInitialDeal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes cardInitialDeal {
+            0% {
+                opacity: 0;
+                transform: translateX(-200px) translateY(-200px) rotate(-180deg) scale(0.3);
+            }
+            70% {
+                opacity: 1;
+                transform: translateX(0) translateY(0) rotate(10deg) scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) translateY(0) rotate(0deg) scale(1);
             }
         }
 
@@ -451,10 +551,19 @@
             display: flex;
             gap: 12px;
             padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 15px;
-            min-height: 100px;
+            min-height: 130px;
             align-items: center;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .card-placeholder {
+            width: 80px;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
         }
 
         .community-cards .card {
@@ -718,6 +827,68 @@
             z-index: 1000;
         }
 
+        /* 次のラウンドへの待機オーバーレイ */
+        .next-round-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 900;
+            cursor: pointer;
+        }
+
+        .next-round-message {
+            background: linear-gradient(135deg, #1a5f3f 0%, #0f4c29 100%);
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            border: 3px solid #ffd700;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: messageFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes messageFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .next-round-message h2 {
+            color: #ffd700;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .next-round-message p {
+            color: white;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .click-hint {
+            color: #ffeb3b;
+            font-size: 1.5em;
+            margin-top: 20px;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
         .result-content {
             background: white;
             padding: 40px;
@@ -955,6 +1126,15 @@
         </div>
     </div>
 
+    <!-- 次のラウンドへ -->
+    <div class="next-round-overlay" id="nextRoundOverlay" onclick="proceedToNextRound()">
+        <div class="next-round-message">
+            <h2 id="roundResultTitle">ラウンド終了</h2>
+            <p id="roundResultText"></p>
+            <div class="click-hint">👆 クリックで次のラウンドへ</div>
+        </div>
+    </div>
+
     <script>
 // ゲーム設定
 const INITIAL_CHIPS = 10000;
@@ -1187,6 +1367,22 @@ function dealCards() {
             player.cards = [deck.pop(), deck.pop()];
         }
     });
+
+    // カード配布アニメーション
+    setTimeout(() => {
+        players.forEach((player, playerIndex) => {
+            if (player.isActive && !player.folded) {
+                const cardsEl = document.getElementById(`cards-${playerIndex}`);
+                if (cardsEl) {
+                    const cards = cardsEl.querySelectorAll('.card');
+                    cards.forEach((card, cardIndex) => {
+                        card.classList.add('initial-deal');
+                        card.style.animationDelay = `${playerIndex * 0.15 + cardIndex * 0.1}s`;
+                    });
+                }
+            }
+        });
+    }, 100);
 }
 
 // ブラインド徴収
@@ -1297,15 +1493,22 @@ function updateDisplay() {
         }
     });
 
-    // コミュニティカード表示
+    // コミュニティカード表示（5枚分の枠を常に表示）
     const communityEl = document.getElementById('communityCards');
     if (communityEl) {
-        communityEl.innerHTML = communityCards.map(card =>
-            `<div class="card ${card.suitName}">
-                <div class="card-value">${card.value}</div>
-                <div class="card-suit">${card.suit}</div>
-            </div>`
-        ).join('');
+        let cardsHtml = '';
+        for (let i = 0; i < 5; i++) {
+            if (i < communityCards.length) {
+                const card = communityCards[i];
+                cardsHtml += `<div class="card ${card.suitName}">
+                    <div class="card-value">${card.value}</div>
+                    <div class="card-suit">${card.suit}</div>
+                </div>`;
+            } else {
+                cardsHtml += '<div class="card-placeholder"></div>';
+            }
+        }
+        communityEl.innerHTML = cardsHtml;
     }
 
     // アクションボタンの有効/無効
@@ -1621,6 +1824,20 @@ function nextPhase() {
     // 表示を更新してコミュニティカードを表示
     updateDisplay();
 
+    // カード配置アニメーション
+    setTimeout(() => {
+        const communityEl = document.getElementById('communityCards');
+        if (communityEl) {
+            const cards = communityEl.querySelectorAll('.card:not(.card-placeholder)');
+            cards.forEach((card, idx) => {
+                if (!card.classList.contains('deal-animation')) {
+                    card.classList.add('deal-animation');
+                    card.style.animationDelay = `${idx * 0.15}s`;
+                }
+            });
+        }
+    }, 50);
+
     // ディーラーの次のアクティブプレイヤーから開始
     currentPlayerIndex = (dealerPosition + 1) % players.length;
     let attempts = 0;
@@ -1643,13 +1860,14 @@ function nextPhase() {
 // ラウンド終了
 function endRound() {
     const winner = players.find(p => p.isActive && !p.folded);
+    const winAmount = pot;
     winner.chips += pot;
-    addLog(`🎉 ${winner.name} が $${pot} を獲得しました！`);
-    highlightWinner(winner.id);
+    addLog(`🎉 ${winner.name} が $${winAmount} を獲得しました！`);
+    highlightWinner(winner.id, winAmount);
     playSound('win');
 
     setTimeout(() => {
-        checkGameEnd();
+        showNextRoundPrompt(`${winner.name} が勝利！`, `+$${winAmount}`);
     }, 3000);
 }
 
@@ -1673,31 +1891,51 @@ function showdown() {
     hands.sort((a, b) => compareHands(b.hand, a.hand));
 
     const winner = hands[0].player;
+    const winAmount = pot;
     winner.chips += pot;
 
-    addLog(`🎉 ${winner.name} が ${hands[0].hand.name} で $${pot} を獲得しました！`);
-    highlightWinner(winner.id);
+    addLog(`🎉 ${winner.name} が ${hands[0].hand.name} で $${winAmount} を獲得しました！`);
 
-    // 全員のカードを表示
+    // 全員のカードを表示（アニメーション付き）
     updateDisplay();
     setTimeout(() => {
-        activePlayers.forEach(p => {
+        activePlayers.forEach((p, idx) => {
             const cardsEl = document.getElementById(`cards-${p.id}`);
+            const infoEl = document.getElementById(`info-${p.id}`);
+
             if (cardsEl && p.id !== 0) {
-                cardsEl.innerHTML = p.cards.map(card =>
-                    `<div class="card ${card.suitName}">
+                cardsEl.innerHTML = p.cards.map((card, cardIdx) =>
+                    `<div class="card ${card.suitName}" style="animation-delay: ${idx * 0.2 + cardIdx * 0.1}s">
                         <div class="card-value">${card.value}</div>
                         <div class="card-suit">${card.suit}</div>
                     </div>`
                 ).join('');
+            }
+
+            // 役名バッジを表示
+            if (infoEl) {
+                const hand = hands.find(h => h.player.id === p.id).hand;
+                const handBadge = document.createElement('div');
+                handBadge.className = 'hand-badge';
+                handBadge.style.animationDelay = `${idx * 0.2}s`;
+                handBadge.textContent = hand.name;
+                infoEl.appendChild(handBadge);
+
+                // 後で削除
+                setTimeout(() => handBadge.remove(), 6000);
             }
         });
     }, 500);
 
     playSound('win');
 
+    // 勝者をハイライト
     setTimeout(() => {
-        checkGameEnd();
+        highlightWinner(winner.id, winAmount);
+    }, 1500);
+
+    setTimeout(() => {
+        showNextRoundPrompt(`${winner.name} が ${hands[0].hand.name} で勝利！`, `+$${winAmount}`);
     }, 5000);
 }
 
@@ -1825,15 +2063,22 @@ function animateChipToPot(playerIndex, amount) {
 }
 
 // 勝者ハイライト
-function highlightWinner(playerIndex) {
+function highlightWinner(playerIndex, amount) {
     const infoEl = document.getElementById(`info-${playerIndex}`);
     if (!infoEl) return;
 
     infoEl.classList.add('winner-glow');
 
+    // Win バッジを表示
+    const winBadge = document.createElement('div');
+    winBadge.className = 'win-badge';
+    winBadge.textContent = `WIN +$${amount}`;
+    infoEl.appendChild(winBadge);
+
     setTimeout(() => {
         infoEl.classList.remove('winner-glow');
-    }, 3000);
+        winBadge.remove();
+    }, 4000);
 }
 
 // ハンド評価（簡易版）
@@ -1866,6 +2111,19 @@ function evaluateHand(holeCards, community) {
 // ハンド比較
 function compareHands(hand1, hand2) {
     return hand1.rank - hand2.rank;
+}
+
+// 次のラウンドへのプロンプト表示
+function showNextRoundPrompt(title, text) {
+    document.getElementById('roundResultTitle').textContent = title;
+    document.getElementById('roundResultText').textContent = text;
+    document.getElementById('nextRoundOverlay').style.display = 'flex';
+}
+
+// 次のラウンドへ進む
+function proceedToNextRound() {
+    document.getElementById('nextRoundOverlay').style.display = 'none';
+    checkGameEnd();
 }
 
 console.log('Texas Hold\'em Poker loaded successfully!');
