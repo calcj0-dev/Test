@@ -2521,16 +2521,20 @@ function executeCpuAction(cpu, action) {
         case 'check':
             addLog(`${cpu.name} がチェックしました`);
             showActionIndicator(cpuIndex, 'check');
-            showActionIndicator(cpuIndex, 'check');
             break;
         case 'call':
             const callAmount = Math.min(currentBet - cpu.bet, cpu.chips);
-            cpu.chips -= callAmount;
-            cpu.bet += callAmount;
-            pot += callAmount;
-            addLog(`${cpu.name} が $${callAmount} をコールしました`);
-            showActionIndicator(cpuIndex, 'call', callAmount);
-            animateChipToPot(cpuIndex, callAmount);
+            if (callAmount === 0) {
+                addLog(`${cpu.name} がチェックしました`);
+                showActionIndicator(cpuIndex, 'check');
+            } else {
+                cpu.chips -= callAmount;
+                cpu.bet += callAmount;
+                pot += callAmount;
+                addLog(`${cpu.name} が $${callAmount} をコールしました`);
+                showActionIndicator(cpuIndex, 'call', callAmount);
+                animateChipToPot(cpuIndex, callAmount);
+            }
             break;
         case 'raise':
             const raiseAmount = Math.min(action.amount, cpu.chips + cpu.bet);
