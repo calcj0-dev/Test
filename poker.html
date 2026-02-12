@@ -2915,6 +2915,9 @@ function animateChipToPot(playerIndex, amount) {
 
 // 勝者ハイライト
 function highlightWinner(playerIndex, amount) {
+    // 全ターンインジケーターを削除
+    document.querySelectorAll('.turn-indicator').forEach(el => el.remove());
+
     const infoEl = document.getElementById(`info-${playerIndex}`);
     if (!infoEl) return;
 
