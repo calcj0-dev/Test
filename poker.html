@@ -997,6 +997,190 @@
             transform: translateY(-2px);
         }
 
+        /* チュートリアルボタン */
+        .tutorial-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .tutorial-btn:hover {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        /* チュートリアルオーバーレイ */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+        }
+
+        .tutorial-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tutorial-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tutorial-header h2 {
+            color: #0f4c29;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .tutorial-progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #2196f3;
+            transform: scale(1.2);
+        }
+
+        .tutorial-step {
+            display: none;
+            animation: tutorialFadeIn 0.4s ease-out;
+        }
+
+        .tutorial-step.active {
+            display: block;
+        }
+
+        @keyframes tutorialFadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .tutorial-step h3 {
+            color: #0f4c29;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 8px;
+        }
+
+        .tutorial-step p {
+            color: #333;
+            font-size: 1em;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .tutorial-step .highlight {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95em;
+        }
+
+        .tutorial-step .hand-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        .tutorial-step .hand-table th {
+            background: #0f4c29;
+            color: #ffd700;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .tutorial-step .hand-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .tutorial-step .hand-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .tutorial-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .tutorial-nav-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .tutorial-nav-btn.prev {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .tutorial-nav-btn.next {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+
+        .tutorial-nav-btn.close {
+            background: linear-gradient(135deg, #0f4c29 0%, #1a5f3f 100%);
+            color: white;
+        }
+
+        .tutorial-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tutorial-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* 結果画面 */
         .result-overlay {
             position: fixed;
@@ -1236,7 +1420,100 @@
                     <span class="diff-desc">アグレッシブ - ブラフ多用</span>
                 </button>
             </div>
+            <button class="tutorial-btn" onclick="showTutorial()">📖 遊び方</button>
+            <br>
             <a href="index.html" class="back-btn">メニューに戻る</a>
+        </div>
+    </div>
+
+    <!-- チュートリアル -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-content">
+            <div class="tutorial-header">
+                <h2>📖 テキサスホールデム 遊び方</h2>
+                <div class="tutorial-progress" id="tutorialProgress"></div>
+            </div>
+
+            <div class="tutorial-step" data-step="0">
+                <h3>🎯 ゲームの目的</h3>
+                <p>テキサスホールデムは、<strong>2枚の手札</strong>と<strong>5枚のコミュニティカード</strong>（場札）を組み合わせて、最も強い5枚の役を作るポーカーゲームです。</p>
+                <div class="highlight">
+                    🃏 手札2枚 ＋ 場札5枚 ＝ 合計7枚から最強の5枚を選ぶ！
+                </div>
+                <p>他のプレイヤーを全員フォールドさせるか、ショーダウンで最強の役を持っていればポット（賭け金の合計）を獲得できます。</p>
+            </div>
+
+            <div class="tutorial-step" data-step="1">
+                <h3>🔄 ゲームの流れ</h3>
+                <p>1ラウンドは4つのフェーズで進行します。各フェーズでベッティング（賭け）が行われます。</p>
+                <div class="highlight">
+                    <strong>① プリフロップ</strong> - 手札2枚が配られる<br>
+                    <strong>② フロップ</strong> - 場に3枚のカードが公開<br>
+                    <strong>③ ターン</strong> - 場に4枚目のカードが公開<br>
+                    <strong>④ リバー</strong> - 場に5枚目（最後）のカードが公開
+                </div>
+                <p>リバーのベッティング後、残ったプレイヤーで<strong>ショーダウン</strong>（手札公開）を行い、最強の役を持つプレイヤーが勝利します。</p>
+            </div>
+
+            <div class="tutorial-step" data-step="2">
+                <h3>🎮 アクション（行動）</h3>
+                <p>各フェーズで自分のターンが来たら、以下のアクションを選べます。</p>
+                <div class="highlight">
+                    <strong>🟥 フォールド</strong> - 降りる（このラウンドを放棄）<br><br>
+                    <strong>🟩 チェック</strong> - パスする（誰もベットしていない時のみ）<br><br>
+                    <strong>🟦 コール</strong> - 相手のベットに合わせる<br><br>
+                    <strong>🟧 レイズ</strong> - ベット額を引き上げる<br><br>
+                    <strong>🟪 オールイン</strong> - 持ちチップ全額を賭ける
+                </div>
+            </div>
+
+            <div class="tutorial-step" data-step="3">
+                <h3>🏆 役一覧（強い順）</h3>
+                <table class="hand-table">
+                    <tr><th>役名</th><th>説明</th></tr>
+                    <tr><td>🥇 ロイヤルフラッシュ</td><td>同じスートのA-K-Q-J-10</td></tr>
+                    <tr><td>🥈 ストレートフラッシュ</td><td>同じスートの連続5枚</td></tr>
+                    <tr><td>🥉 フォーカード</td><td>同じ数字が4枚</td></tr>
+                    <tr><td>フルハウス</td><td>スリーカード＋ワンペア</td></tr>
+                    <tr><td>フラッシュ</td><td>同じスート5枚</td></tr>
+                    <tr><td>ストレート</td><td>連続する数字5枚</td></tr>
+                    <tr><td>スリーカード</td><td>同じ数字が3枚</td></tr>
+                    <tr><td>ツーペア</td><td>ペアが2組</td></tr>
+                    <tr><td>ワンペア</td><td>同じ数字が2枚</td></tr>
+                    <tr><td>ハイカード</td><td>役なし（一番高いカード）</td></tr>
+                </table>
+            </div>
+
+            <div class="tutorial-step" data-step="4">
+                <h3>💰 ブラインドとポット</h3>
+                <p>各ラウンドの開始時に、2人のプレイヤーが強制ベット（ブラインド）を支払います。</p>
+                <div class="highlight">
+                    <strong>SB（スモールブラインド）</strong> - ディーラーの左隣。最低賭け額の半分を支払う<br><br>
+                    <strong>BB（ビッグブラインド）</strong> - SBの左隣。最低賭け額を支払う
+                </div>
+                <p>全プレイヤーのベットは<strong>ポット</strong>に集められ、ラウンドの勝者がポット全額を獲得します。</p>
+                <p>相手のチップを全て奪えばゲーム勝利です！</p>
+            </div>
+
+            <div class="tutorial-step" data-step="5">
+                <h3>💡 初心者向けのコツ</h3>
+                <div class="highlight">
+                    <strong>① ハンドを選ぶ</strong><br>
+                    全ての手札でプレイせず、強い手札（ペア、高いカード同士）の時だけ参加しましょう。<br><br>
+                    <strong>② ポジションを意識する</strong><br>
+                    後から行動する方が有利です。他のプレイヤーの行動を見てから判断できます。<br><br>
+                    <strong>③ 無理をしない</strong><br>
+                    弱い手札で大きなベットにコールし続けるのは損です。思い切ってフォールドする勇気も大切！<br><br>
+                    <strong>④ ポットサイズを意識する</strong><br>
+                    ポットに対してベット額が大きすぎる場合はフォールドも検討しましょう。
+                </div>
+            </div>
+
+            <div class="tutorial-nav">
+                <button class="tutorial-nav-btn prev" id="tutorialPrev" onclick="tutorialStep(-1)">← 前へ</button>
+                <span id="tutorialPageNum" style="color: #666; font-weight: bold;"></span>
+                <button class="tutorial-nav-btn next" id="tutorialNext" onclick="tutorialStep(1)">次へ →</button>
+            </div>
         </div>
     </div>
 
@@ -2488,6 +2765,61 @@ function backToMenu() {
 }
 
 // フェーズアナウンスメント表示
+// チュートリアル
+let currentTutorialStep = 0;
+const TOTAL_TUTORIAL_STEPS = 6;
+
+function showTutorial() {
+    currentTutorialStep = 0;
+    document.getElementById('tutorialOverlay').style.display = 'flex';
+    updateTutorialDisplay();
+}
+
+function closeTutorial() {
+    document.getElementById('tutorialOverlay').style.display = 'none';
+}
+
+function tutorialStep(direction) {
+    currentTutorialStep += direction;
+    if (currentTutorialStep < 0) currentTutorialStep = 0;
+    if (currentTutorialStep >= TOTAL_TUTORIAL_STEPS) {
+        closeTutorial();
+        return;
+    }
+    updateTutorialDisplay();
+}
+
+function updateTutorialDisplay() {
+    // ステップ表示切替
+    document.querySelectorAll('.tutorial-step').forEach(el => {
+        el.classList.remove('active');
+    });
+    const activeStep = document.querySelector(`.tutorial-step[data-step="${currentTutorialStep}"]`);
+    if (activeStep) activeStep.classList.add('active');
+
+    // 進捗ドット更新
+    const progressEl = document.getElementById('tutorialProgress');
+    progressEl.innerHTML = Array.from({length: TOTAL_TUTORIAL_STEPS}, (_, i) =>
+        `<div class="progress-dot ${i === currentTutorialStep ? 'active' : ''}"></div>`
+    ).join('');
+
+    // ページ番号
+    document.getElementById('tutorialPageNum').textContent = `${currentTutorialStep + 1} / ${TOTAL_TUTORIAL_STEPS}`;
+
+    // ボタン制御
+    const prevBtn = document.getElementById('tutorialPrev');
+    const nextBtn = document.getElementById('tutorialNext');
+    prevBtn.disabled = currentTutorialStep === 0;
+
+    if (currentTutorialStep === TOTAL_TUTORIAL_STEPS - 1) {
+        nextBtn.textContent = '閉じる ✕';
+        nextBtn.className = 'tutorial-nav-btn close';
+    } else {
+        nextBtn.textContent = '次へ →';
+        nextBtn.className = 'tutorial-nav-btn next';
+    }
+}
+
 function showPhaseAnnouncement(phaseName, subText, isShowdown = false) {
     const el = document.getElementById('phaseAnnouncement');
     el.className = 'phase-announcement';
