@@ -2521,6 +2521,7 @@ function executeCpuAction(cpu, action) {
         case 'check':
             addLog(`${cpu.name} がチェックしました`);
             showActionIndicator(cpuIndex, 'check');
+            showActionIndicator(cpuIndex, 'check');
             break;
         case 'call':
             const callAmount = Math.min(currentBet - cpu.bet, cpu.chips);
