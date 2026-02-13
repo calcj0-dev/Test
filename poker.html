@@ -957,7 +957,7 @@
             border: 1px solid #ffd700;
             border-radius: 10px;
             padding: 15px;
-            max-width: 400px;
+            max-width: 520px;
             margin: 20px auto;
             color: white;
             display: none;
@@ -976,8 +976,48 @@
 
         .hand-list {
             font-size: 0.9em;
-            line-height: 1.8;
+            line-height: 1.4;
         }
+
+        .hand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hand-row:last-child {
+            border-bottom: none;
+        }
+
+        .hand-row-name {
+            flex-shrink: 0;
+            width: 170px;
+        }
+
+        .hand-row-cards {
+            display: flex;
+            gap: 3px;
+        }
+
+        .mini-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 38px;
+            background: white;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: bold;
+            line-height: 1;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .mini-card.red { color: #e53935; }
+        .mini-card.black { color: #212121; }
 
         .back-btn {
             display: inline-block;
@@ -1580,16 +1620,16 @@
         <div class="hand-ranking">
             <h3>ハンドランキング</h3>
             <div class="hand-list">
-                1. ロイヤルフラッシュ<br>
-                2. ストレートフラッシュ<br>
-                3. フォーカード<br>
-                4. フルハウス<br>
-                5. フラッシュ<br>
-                6. ストレート<br>
-                7. スリーカード<br>
-                8. ツーペア<br>
-                9. ワンペア<br>
-                10. ハイカード
+                <div class="hand-row"><span class="hand-row-name">1. ロイヤルフラッシュ</span><div class="hand-row-cards"><span class="mini-card black">A<br>♠</span><span class="mini-card black">K<br>♠</span><span class="mini-card black">Q<br>♠</span><span class="mini-card black">J<br>♠</span><span class="mini-card black">10<br>♠</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">2. ストレートフラッシュ</span><div class="hand-row-cards"><span class="mini-card red">9<br>♥</span><span class="mini-card red">8<br>♥</span><span class="mini-card red">7<br>♥</span><span class="mini-card red">6<br>♥</span><span class="mini-card red">5<br>♥</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">3. フォーカード</span><div class="hand-row-cards"><span class="mini-card black">K<br>♠</span><span class="mini-card red">K<br>♥</span><span class="mini-card red">K<br>♦</span><span class="mini-card black">K<br>♣</span><span class="mini-card black">3<br>♠</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">4. フルハウス</span><div class="hand-row-cards"><span class="mini-card red">Q<br>♥</span><span class="mini-card black">Q<br>♣</span><span class="mini-card red">Q<br>♦</span><span class="mini-card black">8<br>♠</span><span class="mini-card red">8<br>♥</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">5. フラッシュ</span><div class="hand-row-cards"><span class="mini-card red">A<br>♦</span><span class="mini-card red">J<br>♦</span><span class="mini-card red">9<br>♦</span><span class="mini-card red">6<br>♦</span><span class="mini-card red">3<br>♦</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">6. ストレート</span><div class="hand-row-cards"><span class="mini-card red">10<br>♥</span><span class="mini-card black">9<br>♣</span><span class="mini-card red">8<br>♦</span><span class="mini-card black">7<br>♠</span><span class="mini-card red">6<br>♥</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">7. スリーカード</span><div class="hand-row-cards"><span class="mini-card black">J<br>♠</span><span class="mini-card red">J<br>♥</span><span class="mini-card black">J<br>♣</span><span class="mini-card red">9<br>♦</span><span class="mini-card black">4<br>♠</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">8. ツーペア</span><div class="hand-row-cards"><span class="mini-card red">A<br>♥</span><span class="mini-card black">A<br>♣</span><span class="mini-card red">7<br>♦</span><span class="mini-card black">7<br>♠</span><span class="mini-card red">2<br>♥</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">9. ワンペア</span><div class="hand-row-cards"><span class="mini-card black">10<br>♠</span><span class="mini-card red">10<br>♦</span><span class="mini-card red">K<br>♥</span><span class="mini-card black">5<br>♣</span><span class="mini-card red">3<br>♦</span></div></div>
+                <div class="hand-row"><span class="hand-row-name">10. ハイカード</span><div class="hand-row-cards"><span class="mini-card black">A<br>♠</span><span class="mini-card red">J<br>♥</span><span class="mini-card black">8<br>♣</span><span class="mini-card red">5<br>♦</span><span class="mini-card red">2<br>♥</span></div></div>
             </div>
         </div>
     </div>
