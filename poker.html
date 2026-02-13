@@ -1435,6 +1435,94 @@
                 padding: 3px 5px;
             }
         }
+
+        /* チュートリアル開始ボタン */
+        .tutorial-start-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+            text-align: center;
+        }
+
+        .tutorial-start-btn {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .tutorial-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        /* ガイドダイアログ */
+        .guide-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+        }
+
+        .guide-dialog {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 35px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: guideAppear 0.3s ease-out;
+        }
+
+        @keyframes guideAppear {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .guide-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #0f4c29;
+            margin-bottom: 15px;
+        }
+
+        .guide-text {
+            font-size: 1em;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .guide-ok-btn {
+            background: linear-gradient(135deg, #0f4c29, #1a5f3f);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .guide-ok-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(15, 76, 41, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -1549,6 +1637,10 @@
                 </div>
             </div>
 
+            <div class="tutorial-start-section">
+                <button class="tutorial-start-btn" onclick="startInteractiveTutorial()">🎮 実際にプレイして学ぶ</button>
+            </div>
+
             <div class="tutorial-nav">
                 <button class="tutorial-nav-btn prev" id="tutorialPrev" onclick="tutorialStep(-1)">← 前へ</button>
                 <span id="tutorialPageNum" style="color: #666; font-weight: bold;"></span>
@@ -1655,6 +1747,15 @@
         </div>
     </div>
 
+    <!-- ガイドダイアログ -->
+    <div class="guide-overlay" id="guideOverlay">
+        <div class="guide-dialog">
+            <div class="guide-title" id="guideTitle"></div>
+            <div class="guide-text" id="guideText"></div>
+            <button class="guide-ok-btn" onclick="closeGuide()">OK</button>
+        </div>
+    </div>
+
     <script>
 // ゲーム設定
 const INITIAL_CHIPS = 10000;
@@ -1688,6 +1789,8 @@ let currentBet = 0;
 let dealerPosition = 0;
 let currentPlayerIndex = 0;
 let lastRaiser = -1; // 最後にレイズ/ベットしたプレイヤー
+let isTutorialMode = false; // インタラクティブチュートリアルモード
+let guideResolve = null; // ガイドダイアログのPromise解決関数
 let gamePhase = 'preflop'; // preflop, flop, turn, river, showdown
 let soundEnabled = true;
 let volume = 0.5;
@@ -2667,6 +2770,16 @@ function nextPhase() {
 
     updateDisplay();
 
+    // チュートリアルモード：フェーズガイド表示
+    if (isTutorialMode) {
+        showTutorialGuide(gamePhase).then(() => {
+            if (currentPlayerIndex !== 0) {
+                setTimeout(() => cpuTurn(), DELAYS.CPU_TURN);
+            }
+        });
+        return;
+    }
+
     if (currentPlayerIndex !== 0) {
         setTimeout(() => cpuTurn(), DELAYS.CPU_TURN);
     }
@@ -2681,9 +2794,16 @@ function endRound() {
     highlightWinner(winner.id, winAmount);
     playSound('win');
 
-    setTimeout(() => {
-        showNextRoundPrompt(`${winner.name} が勝利！`, `+$${winAmount}`);
-    }, DELAYS.NEXT_ROUND_PROMPT);
+    if (isTutorialMode) {
+        setTimeout(async () => {
+            await showTutorialGuide('end');
+            endInteractiveTutorial();
+        }, DELAYS.NEXT_ROUND_PROMPT);
+    } else {
+        setTimeout(() => {
+            showNextRoundPrompt(`${winner.name} が勝利！`, `+$${winAmount}`);
+        }, DELAYS.NEXT_ROUND_PROMPT);
+    }
 }
 
 // ショーダウン
@@ -2750,9 +2870,17 @@ function showdown() {
         highlightWinner(winner.id, winAmount);
     }, DELAYS.WINNER_HIGHLIGHT);
 
-    setTimeout(() => {
-        showNextRoundPrompt(`${winner.name} が ${hands[0].hand.name} で勝利！`, `+$${winAmount}`);
-    }, DELAYS.SHOWDOWN_NEXT_ROUND);
+    if (isTutorialMode) {
+        setTimeout(async () => {
+            await showTutorialGuide('showdown');
+            await showTutorialGuide('end');
+            endInteractiveTutorial();
+        }, DELAYS.SHOWDOWN_NEXT_ROUND);
+    } else {
+        setTimeout(() => {
+            showNextRoundPrompt(`${winner.name} が ${hands[0].hand.name} で勝利！`, `+$${winAmount}`);
+        }, DELAYS.SHOWDOWN_NEXT_ROUND);
+    }
 }
 
 // ゲーム終了チェック
@@ -2863,6 +2991,83 @@ function updateTutorialDisplay() {
         nextBtn.textContent = '次へ →';
         nextBtn.className = 'tutorial-nav-btn next';
     }
+}
+
+// インタラクティブチュートリアル
+function showGuide(title, text) {
+    return new Promise(resolve => {
+        guideResolve = resolve;
+        document.getElementById('guideTitle').textContent = title;
+        document.getElementById('guideText').innerHTML = text;
+        document.getElementById('guideOverlay').style.display = 'flex';
+    });
+}
+
+function closeGuide() {
+    document.getElementById('guideOverlay').style.display = 'none';
+    if (guideResolve) {
+        const resolve = guideResolve;
+        guideResolve = null;
+        resolve();
+    }
+}
+
+async function showTutorialGuide(phase) {
+    const guides = {
+        welcome: {
+            title: '🎮 チュートリアル開始',
+            text: 'あなたに2枚のカードが配られました。これが<strong>手札</strong>です。<br><br>コミュニティカード（場の共通カード）と組み合わせて、最強の役を目指しましょう！'
+        },
+        preflop: {
+            title: '📋 プリフロップ',
+            text: 'まだコミュニティカードはありません。<strong>手札の強さだけ</strong>で判断します。<br><br>SB（スモールブラインド）とBB（ビッグブラインド）が自動で支払われています。<br><br>あなたのアクションを選んでください！<br>・<strong>コール</strong>：同額を出して参加<br>・<strong>レイズ</strong>：金額を上げる<br>・<strong>フォールド</strong>：降りる'
+        },
+        flop: {
+            title: '🃏 フロップ',
+            text: '3枚のコミュニティカードが公開されました！<br><br>手札と合わせて<strong>5枚</strong>で役を確認しましょう。<br>良い役ができそうなら<strong>レイズ</strong>、微妙なら<strong>チェック</strong>か<strong>コール</strong>を選びましょう。'
+        },
+        turn: {
+            title: '🃏 ターン',
+            text: '4枚目のコミュニティカードが公開されました。<br><br>役が完成に近づいていますか？<strong>残り1枚</strong>です。<br>ここからベットが大きくなることも多いです。'
+        },
+        river: {
+            title: '🃏 リバー',
+            text: '最後の<strong>5枚目</strong>が公開されました！<br><br>これで全てのカードが揃いました。最終的な役で勝負しましょう。<br>自信があればレイズ、なければチェックかフォールドも検討してください。'
+        },
+        showdown: {
+            title: '🏆 ショーダウン',
+            text: '全員の手札が公開されます！<br><br>最も強い役を持つプレイヤーが<strong>ポット</strong>（場の賭け金全額）を獲得します。'
+        },
+        end: {
+            title: '✅ チュートリアル完了',
+            text: 'お疲れ様でした！基本的な流れは理解できましたか？<br><br><strong>プリフロップ → フロップ → ターン → リバー → ショーダウン</strong><br><br>本番では難易度を選んでプレイしてみましょう！'
+        }
+    };
+    const guide = guides[phase];
+    if (guide) {
+        await showGuide(guide.title, guide.text);
+    }
+}
+
+async function startInteractiveTutorial() {
+    isTutorialMode = true;
+    closeTutorial();
+    document.getElementById('difficultyScreen').style.display = 'none';
+    document.getElementById('gameScreen').style.display = 'block';
+    difficulty = 'easy';
+    initGame();
+    startNewRound();
+    await showTutorialGuide('welcome');
+    if (isTutorialMode && currentPlayerIndex === 0) {
+        await showTutorialGuide('preflop');
+    }
+}
+
+function endInteractiveTutorial() {
+    isTutorialMode = false;
+    document.getElementById('gameScreen').style.display = 'none';
+    document.getElementById('difficultyScreen').style.display = 'flex';
+    stopBGM();
 }
 
 function showPhaseAnnouncement(phaseName, subText, isShowdown = false) {
