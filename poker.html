@@ -1523,6 +1523,29 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(15, 76, 41, 0.4);
         }
+
+        .guide-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .guide-retry-btn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .guide-retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -1598,17 +1621,17 @@
             <div class="tutorial-step" data-step="3">
                 <h3>🏆 役一覧（強い順）</h3>
                 <table class="hand-table">
-                    <tr><th>役名</th><th>説明</th></tr>
-                    <tr><td>🥇 ロイヤルフラッシュ</td><td>同じスートのA-K-Q-J-10</td></tr>
-                    <tr><td>🥈 ストレートフラッシュ</td><td>同じスートの連続5枚</td></tr>
-                    <tr><td>🥉 フォーカード</td><td>同じ数字が4枚</td></tr>
-                    <tr><td>フルハウス</td><td>スリーカード＋ワンペア</td></tr>
-                    <tr><td>フラッシュ</td><td>同じスート5枚</td></tr>
-                    <tr><td>ストレート</td><td>連続する数字5枚</td></tr>
-                    <tr><td>スリーカード</td><td>同じ数字が3枚</td></tr>
-                    <tr><td>ツーペア</td><td>ペアが2組</td></tr>
-                    <tr><td>ワンペア</td><td>同じ数字が2枚</td></tr>
-                    <tr><td>ハイカード</td><td>役なし（一番高いカード）</td></tr>
+                    <tr><th>役名</th><th>例</th><th>説明</th></tr>
+                    <tr><td>🥇 ロイヤルフラッシュ</td><td><div class="hand-row-cards"><span class="mini-card black">A<br>♠</span><span class="mini-card black">K<br>♠</span><span class="mini-card black">Q<br>♠</span><span class="mini-card black">J<br>♠</span><span class="mini-card black">10<br>♠</span></div></td><td>同じマークのA-K-Q-J-10</td></tr>
+                    <tr><td>🥈 ストレートフラッシュ</td><td><div class="hand-row-cards"><span class="mini-card red">9<br>♥</span><span class="mini-card red">8<br>♥</span><span class="mini-card red">7<br>♥</span><span class="mini-card red">6<br>♥</span><span class="mini-card red">5<br>♥</span></div></td><td>同じマークの連続5枚</td></tr>
+                    <tr><td>🥉 フォーカード</td><td><div class="hand-row-cards"><span class="mini-card black">K<br>♠</span><span class="mini-card red">K<br>♥</span><span class="mini-card red">K<br>♦</span><span class="mini-card black">K<br>♣</span><span class="mini-card black">3<br>♠</span></div></td><td>同じ数字が4枚</td></tr>
+                    <tr><td>フルハウス</td><td><div class="hand-row-cards"><span class="mini-card red">Q<br>♥</span><span class="mini-card black">Q<br>♣</span><span class="mini-card red">Q<br>♦</span><span class="mini-card black">8<br>♠</span><span class="mini-card red">8<br>♥</span></div></td><td>スリーカード＋ワンペア</td></tr>
+                    <tr><td>フラッシュ</td><td><div class="hand-row-cards"><span class="mini-card red">A<br>♦</span><span class="mini-card red">J<br>♦</span><span class="mini-card red">9<br>♦</span><span class="mini-card red">6<br>♦</span><span class="mini-card red">3<br>♦</span></div></td><td>同じマークの5枚</td></tr>
+                    <tr><td>ストレート</td><td><div class="hand-row-cards"><span class="mini-card red">10<br>♥</span><span class="mini-card black">9<br>♣</span><span class="mini-card red">8<br>♦</span><span class="mini-card black">7<br>♠</span><span class="mini-card red">6<br>♥</span></div></td><td>連続する数字の5枚</td></tr>
+                    <tr><td>スリーカード</td><td><div class="hand-row-cards"><span class="mini-card black">J<br>♠</span><span class="mini-card red">J<br>♥</span><span class="mini-card black">J<br>♣</span><span class="mini-card red">9<br>♦</span><span class="mini-card black">4<br>♠</span></div></td><td>同じ数字が3枚</td></tr>
+                    <tr><td>ツーペア</td><td><div class="hand-row-cards"><span class="mini-card red">A<br>♥</span><span class="mini-card black">A<br>♣</span><span class="mini-card red">7<br>♦</span><span class="mini-card black">7<br>♠</span><span class="mini-card red">2<br>♥</span></div></td><td>ペアが2組</td></tr>
+                    <tr><td>ワンペア</td><td><div class="hand-row-cards"><span class="mini-card black">10<br>♠</span><span class="mini-card red">10<br>♦</span><span class="mini-card red">K<br>♥</span><span class="mini-card black">5<br>♣</span><span class="mini-card red">3<br>♦</span></div></td><td>同じ数字が2枚</td></tr>
+                    <tr><td>ハイカード</td><td><div class="hand-row-cards"><span class="mini-card black">A<br>♠</span><span class="mini-card red">J<br>♥</span><span class="mini-card black">8<br>♣</span><span class="mini-card red">5<br>♦</span><span class="mini-card red">2<br>♥</span></div></td><td>役なし（一番高いカード）</td></tr>
                 </table>
             </div>
 
@@ -1752,7 +1775,10 @@
         <div class="guide-dialog">
             <div class="guide-title" id="guideTitle"></div>
             <div class="guide-text" id="guideText"></div>
-            <button class="guide-ok-btn" onclick="closeGuide()">OK</button>
+            <div class="guide-buttons">
+                <button class="guide-ok-btn" onclick="closeGuide()">OK</button>
+                <button class="guide-retry-btn" id="guideRetryBtn" onclick="retryTutorial()" style="display:none;">🔄 もう一度</button>
+            </div>
         </div>
     </div>
 
@@ -3045,6 +3071,8 @@ async function showTutorialGuide(phase) {
     };
     const guide = guides[phase];
     if (guide) {
+        // 完了ガイドではリトライボタンを表示
+        document.getElementById('guideRetryBtn').style.display = phase === 'end' ? 'inline-block' : 'none';
         await showGuide(guide.title, guide.text);
     }
 }
@@ -3068,6 +3096,11 @@ function endInteractiveTutorial() {
     document.getElementById('gameScreen').style.display = 'none';
     document.getElementById('difficultyScreen').style.display = 'flex';
     stopBGM();
+}
+
+function retryTutorial() {
+    closeGuide();
+    startInteractiveTutorial();
 }
 
 function showPhaseAnnouncement(phaseName, subText, isShowdown = false) {
