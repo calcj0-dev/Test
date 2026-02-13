@@ -2700,8 +2700,14 @@ function executeCpuAction(cpu, action) {
                 cpu.chips -= callAmount;
                 cpu.bet += callAmount;
                 pot += callAmount;
-                addLog(`${cpu.name} が $${callAmount} をコールしました`);
-                showActionIndicator(cpuIndex, 'call', callAmount);
+                if (cpu.chips === 0) {
+                    cpu.allIn = true;
+                    addLog(`${cpu.name} がオールイン（コール）！ $${callAmount}`);
+                    showActionIndicator(cpuIndex, 'allin', callAmount);
+                } else {
+                    addLog(`${cpu.name} が $${callAmount} をコールしました`);
+                    showActionIndicator(cpuIndex, 'call', callAmount);
+                }
                 animateChipToPot(cpuIndex, callAmount);
             }
             break;
@@ -2713,8 +2719,14 @@ function executeCpuAction(cpu, action) {
             pot += totalBet;
             currentBet = raiseAmount;
             lastRaiser = cpuIndex;
-            addLog(`${cpu.name} が $${raiseAmount} にレイズしました`);
-            showActionIndicator(cpuIndex, 'raise', raiseAmount);
+            if (cpu.chips === 0) {
+                cpu.allIn = true;
+                addLog(`${cpu.name} がオールイン！ $${raiseAmount}`);
+                showActionIndicator(cpuIndex, 'allin', raiseAmount);
+            } else {
+                addLog(`${cpu.name} が $${raiseAmount} にレイズしました`);
+                showActionIndicator(cpuIndex, 'raise', raiseAmount);
+            }
             animateChipToPot(cpuIndex, totalBet);
             break;
     }
@@ -3092,15 +3104,22 @@ async function startInteractiveTutorial() {
 }
 
 function endInteractiveTutorial() {
+    if (tutorialRetrying) return;
     isTutorialMode = false;
     document.getElementById('gameScreen').style.display = 'none';
     document.getElementById('difficultyScreen').style.display = 'flex';
     stopBGM();
 }
 
+let tutorialRetrying = false;
+
 function retryTutorial() {
+    tutorialRetrying = true;
     closeGuide();
-    startInteractiveTutorial();
+    setTimeout(() => {
+        tutorialRetrying = false;
+        startInteractiveTutorial();
+    }, 50);
 }
 
 function showPhaseAnnouncement(phaseName, subText, isShowdown = false) {
